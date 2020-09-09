@@ -1,3 +1,4 @@
+
 " An example for a vimrc file.
 "
 " Maintainer:	Bram Moolenaar <Bram@vim.org>
@@ -51,36 +52,51 @@ if has('syntax') && has('eval')
   packadd! matchit
 endif
 
-" MANUALLY ADDED THE CONFIG BELOW
-
+" 
+"
+"
+" MANNUALLY ADDED CONFIGS BELOW #####
+"
 " enable syntax highlighting
-:syntax enable
-
+":syntax enable
+"
 " color highlighting
 "highlight Normal ctermbg=DarkGray ctermfg=DarkMagenta
-
-" vimscript functions from https://shapeshed.com/vom-statuslines/
-function! GitBranch()
-	return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-
-function! StatuslineGit()
-	let l:branchname = GitBranch()
-	return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
-endfunction
-
+"
+" vimscript functions from https://shapeshed.com/vim-statuslines/
+"function! GitBranch()
+"	return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+"endfunction
+"
+"function! StatuslineGit()
+"	let l:branchname = GitBranch()
+"	return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+"endfunction
+"
 " statusline settings
 :set laststatus=2
-:set statusline=%F
-:set statusline+=
-:set statusline+=\ %{StatuslineGit()}
-:set statusline+=
+":set statusline=%#Folded#
+:set statusline=%#SpellCap#
+":set statusline+=%*
+:set statusline+=\ %F
+":set statusline+=\ %#SpellCap#
+:set statusline+=\ %#Folded#
+":set statusline+=%*
+:set statusline+=\ %y
+":set statusline+=\ %#WildMenu#
+":set statusline+=%*
+":set statusline+=\ %{StatuslineGit()}
+":set statusline+=\ %#SpellBad#
+":set statusline+=%*
+:set statusline+=\ %m
+:set statusline+=\ %r
 :set statusline+=%=
-:set statusline+=%-3l
-:set statusline+=/
-:set statusline+=%3L
-:set statusline+=
-:set statusline+=
+:set statusline+=\ [
+":set statusline+=\ %{&fileecoding?&fileecoding:&encoding}
+":set statusline+=\ ]
+:set statusline+=\ %4l:%-4L
+:set statusline+=\ ]
+:set statusline+=\ %7P
 :set statusline+=
 :set statusline+=
 
