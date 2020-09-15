@@ -58,7 +58,7 @@ endif
 " MANNUALLY ADDED CONFIGS BELOW #####
 "
 " enable syntax highlighting
-":syntax enable
+:syntax enable
 "
 " color highlighting
 "highlight Normal ctermbg=DarkGray ctermfg=DarkMagenta
@@ -76,10 +76,12 @@ endif
 " statusline settings
 :set laststatus=2
 ":set statusline=%#Folded#
-:set statusline=%#SpellCap#
+":set statusline=%#SpellCap#
+:set statusline=%#MatchParen#
 ":set statusline+=%*
 :set statusline+=\ %F
 ":set statusline+=\ %#SpellCap#
+":set statusline+=\ %#WildMenu#
 :set statusline+=\ %#Folded#
 ":set statusline+=%*
 :set statusline+=\ %y
@@ -100,3 +102,40 @@ endif
 :set statusline+=
 :set statusline+=
 
+" new color schemes downloaded from vimcolors.com
+":colorscheme blue
+":colorscheme darkblue
+":colorscheme default
+":colorscheme delek
+":colorscheme desert
+":colorscheme elflord
+":colorscheme evening
+":colorscheme industry
+":colorscheme koehler
+":colorscheme morning
+":colorscheme murphy
+":colorscheme pablo
+":colorscheme peachpuff
+":colorscheme ron
+":colorscheme slate
+":colorscheme torte
+":colorscheme zellner
+":colorscheme 
+" ### NON-DEFAULT THEMES BELOW ###
+":colorscheme monokai
+"
+":colorscheme miramare
+"
+":colorscheme monokai-phoenix
+"
+:colorscheme medic_chalk
+"
+"
+" line highlighting
+"set nu rnu
+"set nu
+"set cursorline
+hi LineNr ctermfg=4
+hi CursorLine cterm=NONE ctermbg=DarkGray
+hi CursorLineNr ctermbg=NONE ctermfg=5 cterm=NONE
+"
