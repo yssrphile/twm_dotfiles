@@ -86,57 +86,56 @@
   # Scrolling distance multiplier.
   #multiplier: 3
 
-### MANUALLY EDITED FONT SETTINGS BELOW ###
 # Font configuration
-font:
+#font:
   # Normal (roman) font face
-  normal:
+  #normal:
     # Font family
     #
     # Default:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: monospace
+    #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Regular
+    #style: Regular
 
   # Bold font face
-  bold:
+  #bold:
     # Font family
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: monospace
+    #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Bold
+    #style: Bold
 
   # Italic font face
-  italic:
+  #italic:
     # Font family
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: monospace
+    #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Italic
+    #style: Italic
 
   # Bold italic font face
-  bold_italic:
+  #bold_italic:
     # Font family
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: monospace
+    #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Bold Italic
+    #style: Bold Italic
 
   # Point size
-  size: 11.0
+  #size: 11.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -160,14 +159,14 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 #draw_bold_text_with_bright_colors: false
 
-
-### MANUALLY EDITED COLOR SETTINGS BELOW ###
+### MANUALLY UNCOMMENTED AND EDITED THE COLOR CONFIG SETTINGS BELOW ###
 # Colors (Tomorrow Night)
 colors:
   # Default colors
+  ### marrakesh.dark theme from terminal.sexy ###
   primary:
-    background: '#021b21'
-    foreground: '#e8dfd6'
+    background: '#201602'
+    foreground: '#948e48'
 
     # Bright and dim foreground colors
     #
@@ -224,25 +223,25 @@ colors:
 
   # Normal colors
   normal:
-    black:   '#032c36'
-    red:     '#c2454e'
-    green:   '#7cbf9e'
-    yellow:  '#8a7a63'
-    blue:    '#2e3340'
-    magenta: '#ff5879'
-    cyan:    '#44b5b1'
-    white:   '#f2f1b9'
+    black:   '#201602'
+    red:     '#c35359'
+    green:   '#18974e'
+    yellow:  '#a88339'
+    blue:    '#477ca1'
+    magenta: '#8868b3'
+    cyan:    '#75a738'
+    white:   '#948e48'
 
   # Bright colors
   bright:
-    black:   '#065f73'
-    red:     '#ef5847'
-    green:   '#a2d9b1'
-    yellow:  '#beb090'
-    blue:    '#61778d'
-    magenta: '#ff99a1'
-    cyan:    '#9ed9d8'
-    white:   '#f6f6c9'
+    black:   '#6c6823'
+    red:     '#c35359'
+    green:   '#18974e'
+    yellow:  '#a88339'
+    blue:    '#477ca1'
+    magenta: '#8868b3'
+    cyan:    '#75a738'
+    white:   '#faf0a5'
 
   # Dim colors
   #
@@ -313,7 +312,7 @@ colors:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-#background_opacity: 1.0
+background_opacity: 0.9
 
 #selection:
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
@@ -323,6 +322,7 @@ colors:
 
 # Allow terminal applications to change Alacritty's window title.
 #dynamic_title: true
+###window.dynamic_title: true
 
 #cursor:
   # Cursor style
