@@ -72,6 +72,10 @@ exec --no-startup-id xautolock -time 20 -locker blurlock
 bindsym $mod+l focus up
 
 
+## < KEYMAP INFO >
+# To get the current mapping of the keyboard keys, run  xmodmap -pke  in a terminal
+
+
 
 
 ##### :APPLICATION KEYBINDINGS AND CONFIGS                                              #####
@@ -85,6 +89,7 @@ bindsym $mod+Return exec termite
 ## < OPEN FIREFOX >
 #bindsym $mod+Shift+Return exec firefox
 bindsym $mod+Shift+Return exec firefox -private-window
+bindsym $mod+Shift+apostrophe exec firefox
 
 
 ## < OPEN FILE MANAGER >
@@ -468,6 +473,7 @@ mode "$mode_gaps_outer" {
 
 
 ## < NOTES >
+# {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
 #   gtk-icon-theme-name = "ZZZZZ"
 #   A good choice is the "elementary-icon-theme" in the community Arch repo
