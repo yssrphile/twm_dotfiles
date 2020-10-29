@@ -82,7 +82,7 @@ endif
 :set statusline+=\ %F
 ":set statusline+=\ %#SpellCap#
 ":set statusline+=\ %#WildMenu#
-:set statusline+=\ %#Folded#
+:set statusline+=\ %#QuickFixLine#
 ":set statusline+=%*
 :set statusline+=\ %y
 ":set statusline+=\ %#WildMenu#
@@ -101,6 +101,10 @@ endif
 :set statusline+=\ %7P
 :set statusline+=
 :set statusline+=
+"
+" NOTE: to view available highiting schemes, use ":highlight"
+" -- ESC to get out
+
 
 " new color schemes downloaded from vimcolors.com
 """:colorscheme blue
@@ -148,5 +152,5 @@ hi CursorLine cterm=NONE ctermbg=DarkGray
 hi CursorLineNr ctermbg=NONE ctermfg=5 cterm=NONE
 "
 "
-" clear search highliting after search: just hit ENTER key again
+" clear search highlighting after search: just hit ENTER key again
 nnoremap <CR> :noh<CR><CR>
