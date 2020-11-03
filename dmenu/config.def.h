@@ -6,17 +6,17 @@ static int centered = 0;                    /* -c option; centers dmenu on scree
 static int min_width = 500;                    /* minimum width when centered */
 /* -fn option overrides fonts[0]; default X11 font or font set */
 static const char *fonts[] = {
-	"ubuntu:size=12"
+	"monospace:size=10"
 };
 static const char *prompt      = NULL;      /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
 	/*     fg         bg       */
-	[SchemeNorm] = { "#2e3340", "#021b21" },
-	[SchemeSel] = { "#032c36", "#a2d9b1" },
-	[SchemeSelHighlight] = { "#8a7a63", "#beb090" },
-	[SchemeNormHighlight] = { "#9ed9d8", "#44b5b1" },
-	[SchemeOut] = { "#065f73", "#032c36" },
-	[SchemeMid] = { "#ff99a1", "#ff5879" },
+	[SchemeNorm] = { "#bbbbbb", "#222222" },
+	[SchemeSel] = { "#eeeeee", "#005577" },
+	[SchemeSelHighlight] = { "#ffc978", "#005577" },
+	[SchemeNormHighlight] = { "#ffc978", "#222222" },
+	[SchemeOut] = { "#000000", "#00ffff" },
+	[SchemeMid] = { "#eeeeee", "#770000" },
 };
 /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
 static unsigned int lines      = 0;
@@ -27,6 +27,3 @@ static unsigned int lineheight = 0;         /* -h option; minimum height of a me
  * for example: " /?\"&[]"
  */
 static const char worddelimiters[] = " ";
-
-/* Size of the window border */
-static unsigned int border_width = 5;
