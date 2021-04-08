@@ -20,45 +20,26 @@
 ; [COLOR DEFINITIONS]
 ;
 [colors]
-;background = ${xrdb:color0:#222}
-;;;background = #222
-; SCHEME COLOR BG
-background = #021b21
-; SCHEME COLOR 03
-background-alt = #8a7a63
-;foreground = ${xrdb:color7:#222}
-;;;foreground = #dfdfdf
-; SCHEME COLOR FG
-foreground = #e8dfd6
-; SCHEME COLOR 11
-foreground-alt = #beb090
-;;;primary = #ffb52a
-; SCHEME COLOR 02
-primary = #7cbf9e
-;;;secondary = #e60053
-; SCHEME COLOR 14
-secondary = #9ed9d8
-alert = #ef5847
+; sweetlove  (https://terminal.sexy/)
+CLRBG = #1f1f1f
+CLR00 = #4a3637
+CLR01 = #d17b49
+CLR02 = #7b8748
+CLR03 = #af865a
+CLR04 = #535c5c
+CLR05 = #775759
+CLR06 = #6d715e
+CLR07 = #c0b18b
 
-CLRBG = #021b21
-CLR00 = #032c36
-CLR01 = #c2454e
-CLR02 = #7cbf9e
-CLR03 = #8a7a63
-CLR04 = #2e3340
-CLR05 = #ff5879
-CLR06 = #44b5b1
-CLR07 = #f2f1b9
-
-CLRFG = #e8dfd6
-CLR08 = #065f73
-CLR09 = #ef5847
-CLR10 = #a2d9b1
-CLR11 = #beb090
-CLR12 = #61778d
-CLR13 = #ff99a1
-CLR14 = #9ed9d8
-CLR15 = #f6f6c9
+CLRFG = #c0b18b
+CLR08 = #402e2e
+CLR09 = #ac5d2f
+CLR10 = #647035
+CLR11 = #8f6840
+CLR12 = #444b4b
+CLR13 = #614445
+CLR14 = #585c49
+CLR15 = #978965
 
 
 ;==========================================================
@@ -90,9 +71,10 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = fixed:pixelsize=10;1
-font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-font-2 = siji:pixelsize=10;1
+;;;font-0 = fixed:pixelsize=10;1
+font-0 = Roboto:pixelsize=11;1
+font-1 = unifont:fontformat=truetype:size=9:antialias=false;0
+font-2 = siji:pixelsize=11;1
 
 modules-left = i3
 modules-center = 
@@ -224,8 +206,8 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date =
-date-alt = " %Y-%m-%d"
+date = " %Y-%m-%d "
+date-alt = 
 
 time = %H:%M
 time-alt = %H:%M:%S
