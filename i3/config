@@ -95,8 +95,8 @@ bindsym $mod+Shift+apostrophe exec firefox
 
 
 ## < OPEN FILE MANAGER >
-bindsym $mod+n exec thunar
-#bindsym $mod+m exec pcmanfm
+#bindsym $mod+n exec thunar
+bindsym $mod+n exec pcmanfm
 bindsym $mod+m exec alacritty -e "ranger"
 
 
@@ -129,10 +129,12 @@ bindsym $mod+Shift+Right move right
 
 ## < ORIENTATION SPLIT & TOGGLE >
 # New window split in horizontal orientation
-bindsym $mod+h split h;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#065f73 'tile horizontally'
+###bindsym $mod+h split h;exec notify-send -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
+bindsym $mod+h split h;exec dunstify -h string:font:'Roboto Mono 9' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
 
 # New window split in vertical orientation
-bindsym $mod+v split v;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#065f73 'tile vertically'
+###bindsym $mod+v split v;exec notify-send -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
+bindsym $mod+v split v;exec dunstify -h string:font:'Roboto Mono 9' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
 
 # Toggle new window orientation split
 bindsym $mod+t split toggle
