@@ -29,9 +29,7 @@ set $mod Mod4
 
 
 ## < FONT FOR WINDOW TITLES >
-###font pango:monospace 10
-font pango:Roboto Mono 10
-###font pango:adobe-source-code-pro 10
+font pango:monospace 9
 #font pango:DejaVu Sans Mono 9
 
 
@@ -74,10 +72,6 @@ exec --no-startup-id xautolock -time 20 -locker blurlock
 bindsym $mod+l focus up
 
 
-## < KEYMAP INFO >
-# To get the current mapping of the keyboard keys, run  xmodmap -pke  in a terminal
-
-
 
 
 ##### :APPLICATION KEYBINDINGS AND CONFIGS                                              #####
@@ -91,7 +85,6 @@ bindsym $mod+Return exec termite
 ## < OPEN FIREFOX >
 #bindsym $mod+Shift+Return exec firefox
 bindsym $mod+Shift+Return exec firefox -private-window
-bindsym $mod+Shift+apostrophe exec firefox
 
 
 ## < OPEN FILE MANAGER >
@@ -129,13 +122,18 @@ bindsym $mod+Shift+Right move right
 
 ## < ORIENTATION SPLIT & TOGGLE >
 # New window split in horizontal orientation
-bindsym $mod+h split h;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#065f73 'tile horizontally'
+bindsym $mod+h split h;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#7cbf9e 'tile horizontally'
 
 # New window split in vertical orientation
-bindsym $mod+v split v;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#065f73 'tile vertically'
+bindsym $mod+v split v;exec notify-send -h string:bgcolor:#032c36 -h string:fgcolor:#e8dfd6 -h string:frcolor:#7cbf9e 'tile vertically'
 
 # Toggle new window orientation split
 bindsym $mod+t split toggle
+
+
+## < NAVIGATE WORKSPACES NEXT / PREVIOUS >
+bindsym $mod+Ctrl+Right workspace next
+bindsym $mod+Ctrl+Left workspace prev
 
 
 ## < FULLSCREEN MODE TOGGLE >
@@ -166,15 +164,6 @@ mode "resize" {
         bindsym Down resize grow height 2 px or 2 ppt
         bindsym Up resize shrink height 2 px or 2 ppt
         bindsym Right resize grow width 2 px or 2 ppt
-          # Pressing left will shrink the window’s width.
-          # Pressing right will grow the window’s width.
-          # Pressing up will shrink the window’s height.
-          # Pressing down will grow the window’s height.
-
-        bindsym Shift+Left resize shrink width 40 px or 40 ppt
-        bindsym Shift+Down resize grow height 20 px or 20 ppt
-        bindsym Shift+Up resize shrink height 40 px or 40 ppt
-        bindsym Shift+Right resize grow width 20 px or 20 ppt
           # Pressing left will shrink the window’s width.
           # Pressing right will grow the window’s width.
           # Pressing up will shrink the window’s height.
@@ -249,11 +238,6 @@ bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
 
-## < NAVIGATE WORKSPACES NEXT / PREVIOUS >
-bindsym $mod+Ctrl+Right workspace next
-bindsym $mod+Ctrl+Left workspace prev
-
-
 ## < MOVE FOCUSED CONTAINER TO WORKSPACE >
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
@@ -268,8 +252,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 
 ## < OPEN APPLICATIONS ON SPECIFIC WORKSPACES >
-# assign [class="Thunderbird"] $ws9
-# assign [class="Firefox"] $ws5
+# assign [class="Thunderbird"] $ws1
+# assign [class="Firefox"] $ws2
 assign [class="Thunar"] $ws7
 assign [class="Pcmanfm"] $ws7
 assign [class="Alacritty"] $ws7
@@ -289,7 +273,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 
 ## < i3BAR SETTINGS >
-# All commented out, but preserved because I might want to use the default bar
+# All commented out, but preserved because I might want to use the bar
 #bar {
 #    status_command    i3blocks -c ~/.config/i3blocks/config/i3blocks.conf
 #    position          top
@@ -319,34 +303,34 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 ## < DEFINITION OF STANDARD COLORS >
 # FROM: terminal.sexy
-# STYLE: sweetlove
+# STYLE: navy-and-white
 #   Also used for termite and alacritty
-set $tclrbg #1f1f1f
-set $tclr00 #4a3637
-set $tclr01 #d17b49
-set $tclr02 #7b8748
-set $tclr03 #af865a
-set $tclr04 #535c5c
-set $tclr05 #775759
-set $tclr06 #6d715e
-set $tclr07 #c0b18b
+set $tclrbg #021b21
+set $tclr00 #032c36
+set $tclr01 #c2454e
+set $tclr02 #7cbf9e
+set $tclr03 #8a7a63
+set $tclr04 #2e3340
+set $tclr05 #ff5879
+set $tclr06 #44b5b1
+set $tclr07 #f2f1b9
 
-set $tclrfg #c0b18b
-set $tclr08 #402e2e
-set $tclr09 #ac5d2f
-set $tclr10 #ac5d2f
-set $tclr11 #8f6840
-set $tclr12 #444b4b
-set $tclr13 #614445
-set $tclr14 #585c49
-set $tclr15 #978965
+set $tclrfg #e8dfd6
+set $tclr08 #065f73
+set $tclr09 #ef5847
+set $tclr10 #a2d9b1
+set $tclr11 #beb090
+set $tclr12 #61778d
+set $tclr13 #ff99a1
+set $tclr14 #9ed9d8
+set $tclr15 #f6f6c9
 
 
 ## < WINDOW DECORATION/COLOR >
 # class			border  backgrd textclr indictr chldbdr
-client.focused		$tclr01 $tclr01 $tclr08 $tclr09 $tclrfg
+client.focused		$tclr01 $tclr01 $tclr15 $tclr09 $tclrfg
 client.focused_inactive	$tclrbg $tclrbg $tclr01 #484e50 #7e705a
-client.unfocused	$tclrbg $tclrbg $tclr12 #292d2e #222222
+client.unfocused	$tclrbg $tclrbg $tclr04 #292d2e #222222
 client.urgent		#2f343a #900000 $tclr29 #900000 #900000
 client.placeholder	#000000 #0c0c0c #ffffff #000000 #0c0c0c
 
@@ -361,16 +345,13 @@ client.background	#ffffff
 ## < LOGOUT, SHUTDOWN, RESTART, AND LOCKING >
 bindsym $mod+Shift+e mode "$mode_system"
 
-set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, th)ibernate, (r)eboot, (Shift+s)hutdown
-
-#set $user_session loginctl session-status | awk 'NR==1{print $1}'
-set $user_session `loginctl session-status | head -n 1 | awk '{print $1}'`
+set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 
 mode "$mode_system" {
     bindsym l exec --no-startup-id loginctl lock-session, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
     bindsym u exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e exec --no-startup-id loginctl terminate-session $user_session, mode "default"
+    bindsym e exec --no-startup-id loginctl terminate-session, mode "default"
     bindsym h exec --no-startup-id systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     ##bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
@@ -469,35 +450,30 @@ mode "$mode_gaps_outer" {
 # 03. rofi
 # 04. nitrogen
 # 05. picom
-# 06. termite -- default terminal
+# 06. termite
 # 07. alacritty
 # 08. ranger
 # 09. firefox
 # 10. thunar (OR pcmanfm as ALT)
 # 11. ranger
-# 12. exa -- replace "ls" command
+# 12. exa
 # 13. vim (and nvim/neovim ??)
 # 14. dunst
-# 15. zsh (and oh-my-zsh)
-# 16. bat -- replace "cat" command
-# 17. roboto mono font installed
+# 15. 
+# 16. 
+# 17. 
 # 18. 
 # 19. 
 # 20. 
 
 
 ## < NOTES >
-# {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
 #   gtk-icon-theme-name = "ZZZZZ"
 #   A good choice is the "elementary-icon-theme" in the community Arch repo
 #   Run  ls -al /usr/share/icons  to see the list of installed themes
 
 # {14} dunst: required to display notify-send calls when toggling window split
-
-# Consult the Arch Wiki to figure out where to copy standard configs from/to
-
-# This config was built on top of EndeavorOS
 
 
 
@@ -506,7 +482,7 @@ mode "$mode_gaps_outer" {
 #############################################################################################
 
 # 01. figure out how to change the nm-applet icon
-# 02. get polybar power options working
+# 02. 
 # 03. 
 # 04. 
 # 05. 
