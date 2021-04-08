@@ -91,19 +91,19 @@ window:
   #multiplier: 3
 
 # Font configuration
-#font:
+font:
   # Normal (roman) font face
-  #normal:
+  normal:
     # Font family
     #
     # Default:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    #family: monospace
+    family: Roboto Mono
 
     # The `style` can be specified to pick a specific face.
-    #style: Regular
+    style: Regular
 
   # Bold font face
   #bold:
@@ -139,7 +139,7 @@ window:
     #style: Bold Italic
 
   # Point size
-  #size: 11.0
+  size: 11.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -161,16 +161,17 @@ window:
   #use_thin_strokes: true
 
 # If `true`, bold text is drawn using the bright color variants.
-#draw_bold_text_with_bright_colors: false
+###draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
 ### MANUALLY UNCOMMENTED AND EDITED THE COLOR CONFIG SETTINGS BELOW ###
 # Colors (Tomorrow Night)
 colors:
   # Default colors
-  ### marrakesh.dark theme from terminal.sexy ###
+  ### sweetlove theme from terminal.sexy ###
   primary:
-    background: '#021b21'
-    foreground: '#e8dfd6'
+    background: '#1f1f1f'
+    foreground: '#c0b18b'
 
     # Bright and dim foreground colors
     #
@@ -227,25 +228,25 @@ colors:
 
   # Normal colors
   normal:
-    black:   '#032c36'
-    red:     '#c2454e'
-    green:   '#7cbf9e'
-    yellow:  '#8a7a63'
-    blue:    '#2e3340'
-    magenta: '#ff5879'
-    cyan:    '#44b5b1'
-    white:   '#f2f1b9'
+    black:   '#4a3637'
+    red:     '#d17b49'
+    green:   '#7b8748'
+    yellow:  '#af865a'
+    blue:    '#535c5c'
+    magenta: '#775759'
+    cyan:    '#6d715e'
+    white:   '#c0b18b'
 
   # Bright colors
   bright:
-    black:   '#065f73'
-    red:     '#ef5847'
-    green:   '#a2d9b1'
-    yellow:  '#beb090'
-    blue:    '#61778d'
-    magenta: '#ff99a1'
-    cyan:    '#9ed9d8'
-    white:   '#f6f6c9'
+    black:   '#402e2e'
+    red:     '#ac5d2f'
+    green:   '#647035'
+    yellow:  '#8f6840'
+    blue:    '#444b4b'
+    magenta: '#614445'
+    cyan:    '#585c49'
+    white:   '#978965'
 
   # Dim colors
   #
