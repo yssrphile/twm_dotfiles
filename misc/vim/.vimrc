@@ -60,20 +60,20 @@ endif
 "
 " ### VIMSCRIPT FUNCTIONS ###
     " git function from https://vi.stackexchange.com/questions/26708/how-to-get-vim-to-show-git-status-in-the-statusline
-augroup gitstatusline
-    au!
-
-    autocmd BufEnter,FocusGained,BufWritePost *
-        \ let b:git_clean = system(printf("cd %s && git status --porcelain 2>/dev/null", expand('%:p:h:S'))) is# ''
-augroup end
-
-function! GitLineInfo2() abort
-    return get(b:, "git_clean", "") ? "[clean]" : "[changed]"
-endfunction
-
-function! GitLineInfo1() abort
-    return substitute(system("git status -s"), "\n", " ", "g")
-endfunction
+"augroup gitstatusline
+"    au!
+"
+"    autocmd BufEnter,FocusGained,BufWritePost *
+"        \ let b:git_clean = system(printf("cd %s && git status --porcelain 2>/dev/null", expand('%:p:h:S'))) is# ''
+"augroup end
+"
+"function! GitLineInfo2() abort
+"    return get(b:, "git_clean", "") ? "[clean]" : "[changed]"
+"endfunction
+"
+"function! GitLineInfo1() abort
+"    return substitute(system("git status -s"), "\n", " ", "g")
+"endfunction
 
 "
 "
@@ -88,11 +88,11 @@ endfunction
 ":set statusline+=%*
 :set statusline+=\ %y
 ">>>
-:set statusline+=\ %#WildMenu#
-:set statusline+=%*
-:set statusline+=\ %{GitLineInfo2()}
-:set statusline+=%*
-:set statusline+=\ %#Search#
+":set statusline+=\ %#WildMenu#
+":set statusline+=%*
+":set statusline+=\ %{GitLineInfo2()}
+":set statusline+=%*
+":set statusline+=\ %#Search#
 ">>>
 :set statusline+=\ %m
 :set statusline+=\ %r
