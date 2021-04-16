@@ -30,6 +30,10 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+###
+import os, subprocess
+
+
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -88,7 +92,10 @@ keys = [
 
     ### MY OWN MISC. CREATED KEYBINDINGS ###
     Key([mod], "f", lazy.spawn("firefox"), desc="Launch Firefox web browser"),
-    Key([mod], "z", lazy.spawn("dmenu_run -h 16"), desc="Run dmenu"),
+    Key([mod], "z", lazy.spawn("dmenu_run -c -l 20"), desc="Run dmenu"),
+    ## NEED TO GET DMENU RE-HACKED ACCORDING TO DISTROTUBE
+    Key([mod, "control"], "minus", lazy.spawn("systemctl poweroff"), desc="Shutdown computer"),
+    Key([mod, "control"], "equal", lazy.spawn("systemctl reboot"), desc="Restart computer"),
     # >> look in ~/dmenu/config.h for configurable options/flags and to change color scheme
 ]
 
@@ -110,32 +117,9 @@ for i in groups:
              desc="move focused window to group {}".format(i.name)), ### uncommented
     ])
 
-layouts = [
-    layout.MonadTall(),##
-    layout.RatioTile(),##
-    layout.TreeTab(),##
-    layout.Max(),
-    ###layout.Stack(num_stacks=2),
-    # Try more layouts by unleashing below layouts.
-    # layout.Bsp(),
-    # layout.Columns(),
-    # layout.Matrix(),
-    # layout.MonadWide(),
-    # layout.Tile(),
-    # layout.VerticalTile(),
-    ###layout.Zoomy(),##
-]
 
-widget_defaults = dict(
-    font='sans',
-    fontsize=14,
-    padding=3,
-)
-extension_defaults = widget_defaults.copy()
 
-### THE BAR SETTINGS BELOW HAVE BEEN EDITED/CUSTOMIZED ###
-
-## MY DEFINED BAR COLORS ##
+## MY DEFINED COLORS ##
 themeColor = [
         "021b21", # panel bg
         "e8dfd6", # panel fg (text)
@@ -178,13 +162,57 @@ themeColors = {
         "15":themeColor[17], #
         }
 
+
+
+
+layouts = [
+    layout.MonadTall(),##
+    layout.RatioTile(),##
+    layout.TreeTab(
+        #sections = ["FIRST", "SECOND"],
+        bg_color=themeColors["bg"],
+        section_fg=themeColors["11"],
+        active_bg=themeColors["08"],
+        active_fg=themeColors["11"],
+        inactive_bg=themeColors["04"],
+        inactive_fg=themeColors["08"]
+        ),
+    #layout.TreeTab(),
+    layout.Max(),##
+    ###layout.Stack(num_stacks=2),
+    # Try more layouts by unleashing below layouts.
+    # layout.Bsp(),
+    # layout.Columns(),
+    # layout.Matrix(),
+    # layout.MonadWide(),
+    # layout.Tile(),
+    # layout.VerticalTile(),
+    ###layout.Zoomy(),##
+]
+
+widget_defaults = dict(
+    font='noto sans mono',
+    fontsize=14,
+    padding=3,
+)
+extension_defaults = widget_defaults.copy()
+
+### THE BAR SETTINGS BELOW HAVE BEEN EDITED/CUSTOMIZED ###
+
 screens = [
     Screen(
         top=bar.Bar(
             [
                 widget.CurrentLayout(foreground=themeColors["09"]),
-                widget.GroupBox(active=themeColors["07"], inactive=themeColors["04"], highlight_method="block", block_highlight_text_color=themeColors["13"]),
+                widget.TextBox(" ", padding=2),
+                widget.GroupBox(
+                    active=themeColors["07"],
+                    inactive=themeColors["04"],
+                    highlight_method="block",
+                    block_highlight_text_color=themeColors["13"]
+                    ),
                 widget.Prompt(),
+                widget.TextBox(" ", padding=8),
                 widget.WindowName(foreground=themeColors["06"]),
                 widget.Chord(
                     chords_colors={
@@ -192,12 +220,23 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox("default config", name="default", foreground=themeColors["03"]),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground=themeColors["02"]),
+                #widget.TextBox("default config", name="default", foreground=themeColors["03"]),
+                #widget.TextBox("Press &lt;M-r&gt; to spawn", foreground=themeColors["02"]),
+                ###widget.CPU(), ### THIS DOES NOT SEEM TO WORK
+                #widget.BatteryIcon(foreground=themeColors["02"]),
+                widget.TextBox("Battery: ", foreground=themeColors["03"]),
+                widget.Battery(
+                    foreground=themeColors["03"],
+                    format='{char} {percent:2.0%}',
+                    update_interval=30
+                    ),
+                widget.TextBox("|", padding=10, foreground=themeColors["fg"]),
                 widget.Systray(),
-                #widget.CPU(),
+                #widget.Clock(format='%Y-%m-%d %a %I:%M %p', foreground=themeColors["12"], padding=30),
                 widget.Clock(format='%Y-%m-%d %a %I:%M %p', foreground=themeColors["12"]),
+                widget.TextBox("|", padding=10, foreground=themeColors["fg"]),
                 widget.QuickExit(foreground=themeColors["09"]),
+                #widget.TextBox(" ", padding=1),
             ],
             30,
             background=themeColors["bg"],
@@ -241,6 +280,14 @@ floating_layout = layout.Floating(float_rules=[
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
+
+
+### AUTOSTART APPLICATIONS ###
+# borrowed from https://github.com/qtile/qtile-examples/blob/master/serge/config.py
+os.system('nitrogen --restore')
+os.system('picom -b')
+
+
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
