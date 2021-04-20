@@ -41,6 +41,11 @@ CLR13 = #614445
 CLR14 = #585c49
 CLR15 = #978965
 
+CLRTP = #e61f1f1f
+; TO SEE TRANSPARENCY OPTIONS:
+; https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
+
+
 
 ;==========================================================
 
@@ -56,7 +61,7 @@ height = 27
 radius = 0.0
 fixed-center = false
 
-background = ${colors.CLRBG}
+background = ${colors.CLRTP}
 foreground = ${colors.CLRFG}
 
 line-size = 3
