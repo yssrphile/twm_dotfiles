@@ -30,9 +30,12 @@ set $mod Mod4
 
 ## < FONT FOR WINDOW TITLES >
 ###font pango:monospace 10
-font pango:Roboto Mono 10
-###font pango:adobe-source-code-pro 10
-#font pango:DejaVu Sans Mono 9
+font pango:roboto mono 10
+#font pango:dejavu sans mono 9
+
+
+## < FONT CACHE INFO >
+# To get a list of installed fonts, use_  fc-list : family style  _in a terminal
 
 
 ## < KILL FOCUSED WINDOW >
@@ -75,7 +78,7 @@ bindsym $mod+l focus up
 
 
 ## < KEYMAP INFO >
-# To get the current mapping of the keyboard keys, run  xmodmap -pke  in a terminal
+# To get the current mapping of the keyboard keys, run_  xmodmap -pke  _in a terminal
 
 
 
@@ -86,6 +89,7 @@ bindsym $mod+l focus up
 ## < OPEN A TERMINAL >
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec termite
+bindsym $mod+backslash exec kitty
 
 
 ## < OPEN FIREFOX >
@@ -102,7 +106,13 @@ bindsym $mod+m exec alacritty -e "ranger"
 
 ## < OPEN PROGRAM LAUNCHER >
 # [ Rofi ]
-bindsym $mod+z exec --no-startup-id rofi -show drun -theme solarized-darker -icon-theme "Papirus" -show-icons
+###bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -icon-theme "Paper" -show-icons
+
+bindsym $mod+z exec rofi -modi combi -show combi -combi-modi "window#drun" -display-combi "App Launcher" -display-drun "" -theme sweetlove -icon-theme "Paper" -show-icons
+
+###bindsym $mod+z exec --no-startup-id rofi -modi combi -show combi -combi-modi "window#run" -theme sidebar -icon-theme "Papirus" -font "Roboto Mono 11" -show-icons -sort -columns 2
+
+###bindsym $mod+z exec --no-startup-id rofi -modi combi -show combi -combi-modi "window#run" -theme solarized-darker -icon-theme "Paper" -font "Roboto Mono 11" -show-icons -sort -columns 2
 
 # [ Dmenu ]
 #bindsym $mod+d exec dmenu_run
@@ -189,7 +199,7 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-# NOTE: default resize was 10 px or 10 ppt, but change to 2 px or 2 ppt
+# NOTE: default resize was 10 px or 10 ppt, but changed to 2 px or 2 ppt
 
 
 ## < FLOATING MODE >
@@ -472,7 +482,7 @@ mode "$mode_gaps_outer" {
 # 04. nitrogen
 # 05. picom
 # 06. termite -- default terminal
-# 07. alacritty
+# 07. alacritty (or kitty as ALT)
 # 08. ranger
 # 09. firefox
 # 10. thunar (OR pcmanfm as ALT)
@@ -482,20 +492,26 @@ mode "$mode_gaps_outer" {
 # 14. dunst
 # 15. zsh (and oh-my-zsh)
 # 16. bat -- replace "cat" command
-# 17. roboto mono font installed
-# 18. 
-# 19. 
+# 17. roboto mono FONT // i3, polybar, termite, alacritty
+# 18. hermit FONT // only for use with kitty
+# 19. yay
 # 20. 
 
 
 ## < NOTES >
+# {07} kitty: configured to use a light color theme to stand out from termite
+#
 # {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
 #   gtk-icon-theme-name = "ZZZZZ"
-#   A good choice is the "elementary-icon-theme" in the community Arch repo
 #   Run  ls -al /usr/share/icons  to see the list of installed themes
-
+#   -OR-  Run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
+#
+#   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
+# 
 # {14} dunst: required to display notify-send calls when toggling window split
+# 
+# {15} zsh/oh-my-zsh: zshrc uses neofetch
 
 # Consult the Arch Wiki to figure out where to copy standard configs from/to
 
