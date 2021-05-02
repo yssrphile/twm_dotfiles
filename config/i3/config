@@ -482,8 +482,8 @@ mode "$mode_gaps_outer" {
 # 04. nitrogen
 # 05. picom
 # 06. termite -- default terminal
-# 07. alacritty (or kitty as ALT)
-# 08. ranger
+# 07. alacritty
+# 08. kitty
 # 09. firefox
 # 10. thunar (OR pcmanfm as ALT)
 # 11. ranger
@@ -499,7 +499,7 @@ mode "$mode_gaps_outer" {
 
 
 ## < NOTES >
-# {07} kitty: configured to use a light color theme to stand out from termite
+# {08} kitty: configured to use a light color theme to stand out from termite
 #
 # {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
@@ -509,6 +509,8 @@ mode "$mode_gaps_outer" {
 #
 #   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
 # 
+# {11} ranger: may consider installing optional dependency "w3m" to preview html files
+#
 # {14} dunst: required to display notify-send calls when toggling window split
 # 
 # {15} zsh/oh-my-zsh: zshrc uses neofetch
