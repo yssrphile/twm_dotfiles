@@ -492,13 +492,16 @@ mode "$mode_gaps_outer" {
 # 14. dunst
 # 15. zsh (and oh-my-zsh)
 # 16. bat -- replace "cat" command
-# 17. roboto mono FONT // i3, polybar, termite, alacritty
-# 18. hermit FONT // only for use with kitty
-# 19. yay
-# 20. 
+# 17. ttf-roboto-mono FONT // i3, polybar, termite, alacritty
+# 18. otf-hermit FONT // only for use with kitty
+# 19. noto-fonts FONT // for gtk settings
+# 20. yay
 
 
 ## < NOTES >
+# {02) polybar: need to make sure the "launch.sh" file is executable
+#   need to run "chmod 755" on that file
+#
 # {08} kitty: configured to use a light color theme to stand out from termite
 #
 # {10} thunar: also uses "leafpad" for opening plaing text files
@@ -508,6 +511,7 @@ mode "$mode_gaps_outer" {
 #   -OR-  Run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
 #
 #   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
+#   >> THEMES USED CURRENTLY: "Arc" gtk theme, "Paper" icon theme
 # 
 # {11} ranger: may consider installing optional dependency "w3m" to preview html files
 #
