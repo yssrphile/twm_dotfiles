@@ -29,9 +29,7 @@ set $mod Mod4
 
 
 ## < FONT FOR WINDOW TITLES >
-###font pango:monospace 10
-font pango:roboto mono 10
-#font pango:dejavu sans mono 9
+font pango:roboto mono 9
 
 
 ## < FONT CACHE INFO >
@@ -66,15 +64,15 @@ exec_always picom -f
 
 ## < AUTOSTART APPLICATIONS >
 exec --no-startup-id nitrogen --restore; sleep 1
-exec --no-startup-id numlockx off
-exec --no-startup-id xautolock -time 20 -locker blurlock
+###exec --no-startup-id numlockx off
+###exec --no-startup-id xautolock -time 20 -locker blurlock
 #exec_always --no-startup-id ff-theme-util
 #exec_always --no-startup-id fix_xcursor
 
 
 ## < KEYBIND BLOCK >
 # Prevent binding any action to MOD+L; for VM on Windows host
-bindsym $mod+l focus up
+###bindsym $mod+l focus up
 
 
 ## < KEYMAP INFO >
@@ -88,12 +86,12 @@ bindsym $mod+l focus up
 
 ## < OPEN A TERMINAL >
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec termite
+###bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 bindsym $mod+backslash exec kitty
 
 
 ## < OPEN FIREFOX >
-#bindsym $mod+Shift+Return exec firefox
 bindsym $mod+Shift+Return exec firefox -private-window
 bindsym $mod+Shift+apostrophe exec firefox
 
@@ -101,18 +99,18 @@ bindsym $mod+Shift+apostrophe exec firefox
 ## < OPEN FILE MANAGER >
 #bindsym $mod+n exec thunar
 bindsym $mod+n exec pcmanfm
-bindsym $mod+m exec alacritty -e "ranger"
+bindsym $mod+m exec kitty -e "ranger"
 
 
 ## < OPEN PROGRAM LAUNCHER >
 # [ Rofi ]
-###bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -icon-theme "Paper" -show-icons
+bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons
+#bindsym F12 exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -icon-theme "Paper" -show-icons
+bindsym F12 exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons
+#bindsym F11 exec rofi -show "window" -theme sweetlove -icon-theme "Paper" -show-icons
+bindsym F11 exec rofi -show "window" -theme sweetlove -show-icons
+###bindsym $mod+z exec rofi -modi combi -show combi -combi-modi "window#drun" -display-combi "App Launcher" -display-drun "" -theme sweetlove -icon-theme "Paper" -show-icons
 
-bindsym $mod+z exec rofi -modi combi -show combi -combi-modi "window#drun" -display-combi "App Launcher" -display-drun "" -theme sweetlove -icon-theme "Paper" -show-icons
-
-###bindsym $mod+z exec --no-startup-id rofi -modi combi -show combi -combi-modi "window#run" -theme sidebar -icon-theme "Papirus" -font "Roboto Mono 11" -show-icons -sort -columns 2
-
-###bindsym $mod+z exec --no-startup-id rofi -modi combi -show combi -combi-modi "window#run" -theme solarized-darker -icon-theme "Paper" -font "Roboto Mono 11" -show-icons -sort -columns 2
 
 # [ Dmenu ]
 #bindsym $mod+d exec dmenu_run
@@ -282,9 +280,9 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 ## < OPEN APPLICATIONS ON SPECIFIC WORKSPACES >
 # assign [class="Thunderbird"] $ws9
 # assign [class="Firefox"] $ws5
-assign [class="Thunar"] $ws7
-assign [class="Pcmanfm"] $ws7
-assign [class="Alacritty"] $ws7
+# assign [class="Thunar"] $ws7
+###assign [class="Pcmanfm"] $ws7
+###assign [class="Alacritty"] $ws7
 
 
 ## < SWITCH TO WORKSPACE WITH URGENT WINDOW AUTOMATICALLY >
@@ -297,7 +295,9 @@ for_window [urgent=latest] focus
 #############################################################################################
 
 ## < POLYBAR SETTINGS >
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+#####exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+###exec_always --no-startup-id ~/.config/polybar/launch.sh
+exec_always --no-startup-id /home/les/.config/polybar/launch.sh
 
 
 ## < i3BAR SETTINGS >
@@ -385,7 +385,6 @@ mode "$mode_system" {
     bindsym e exec --no-startup-id loginctl terminate-session $user_session, mode "default"
     bindsym h exec --no-startup-id systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    ##bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
 
     # exit system mode: "Enter" or "Escape"
@@ -481,9 +480,9 @@ mode "$mode_gaps_outer" {
 # 03. rofi
 # 04. nitrogen
 # 05. picom
-# 06. termite -- default terminal
-# 07. alacritty (or kitty as ALT)
-# 08. ranger
+# 06. termite -- [ newly obsolete: devs suggest replace w/ alacritty ]
+# 07. alacritty -- new default terminal
+# 08. kitty
 # 09. firefox
 # 10. thunar (OR pcmanfm as ALT)
 # 11. ranger
@@ -492,22 +491,33 @@ mode "$mode_gaps_outer" {
 # 14. dunst
 # 15. zsh (and oh-my-zsh)
 # 16. bat -- replace "cat" command
-# 17. roboto mono FONT // i3, polybar, termite, alacritty
-# 18. hermit FONT // kitty
-# 19. 
-# 20. 
+# 17. ttf-roboto-mono FONT // i3, polybar, termite, alacritty
+# 18. otf-hermit FONT // only for use with kitty
+# 19. noto-fonts FONT // for gtk settings
+# 20. yay
 
 
 ## < NOTES >
+# {02) polybar: need to make sure the "launch.sh" file is executable
+#   need to run "chmod 755" on that file
+#
+# {08} kitty: configured to use a light color theme to stand out from termite
+#   UPDATE: re-cofigured to use a dark color theme, since alacritty is replacing termite
+#
 # {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
 #   gtk-icon-theme-name = "ZZZZZ"
-#   A good choice is the "elementary-icon-theme" in the community Arch repo
 #   Run  ls -al /usr/share/icons  to see the list of installed themes
+#   -OR-  Run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
+#
+#   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
+#   >> THEMES USED CURRENTLY: "Arc" gtk theme, "Paper" icon theme
 # 
+# {11} ranger: may consider installing optional dependency "w3m" to preview html files
+#
 # {14} dunst: required to display notify-send calls when toggling window split
 # 
-# {07} kitty: configured to use a light color theme to stand out from termite
+# {15} zsh/oh-my-zsh: zshrc uses neofetch
 
 # Consult the Arch Wiki to figure out where to copy standard configs from/to
 
@@ -515,12 +525,11 @@ mode "$mode_gaps_outer" {
 
 
 
-
 ##### :STUFF LEFT TO FIX                                                                #####
 #############################################################################################
 
-# 01. figure out how to change the nm-applet icon
-# 02. get polybar power options working
+# 01. figure out the lockscreen: how to auto lock, and then how to customize the look
+# 02. 
 # 03. 
 # 04. 
 # 05. 
