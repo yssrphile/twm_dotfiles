@@ -65,9 +65,11 @@ exec_always picom -f
 ## < AUTOSTART APPLICATIONS >
 exec --no-startup-id nitrogen --restore; sleep 1
 ###exec --no-startup-id numlockx off
-###exec --no-startup-id xautolock -time 20 -locker blurlock
 #exec_always --no-startup-id ff-theme-util
 #exec_always --no-startup-id fix_xcursor
+###exec --no-startup-id locker-script
+###exec_always --no-startup-id timer-lock-and-suspend
+exec --no-startup-id xfce4-power-manager
 
 
 ## < KEYBIND BLOCK >
@@ -102,14 +104,29 @@ bindsym $mod+n exec pcmanfm
 bindsym $mod+m exec kitty -e "ranger"
 
 
+## < OPEN GTOP >
+bindsym $mod+g exec alacritty -e "gtop"
+
+
+## < GRAB SCREENSHOT >
+bindsym Print exec "scrot ~/Pictures/Screenshots/%Y-%m-%d-%T-screenshot.png"
+
+
 ## < OPEN PROGRAM LAUNCHER >
 # [ Rofi ]
-bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons
-#bindsym F12 exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -icon-theme "Paper" -show-icons
-bindsym F12 exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons
-#bindsym F11 exec rofi -show "window" -theme sweetlove -icon-theme "Paper" -show-icons
+bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons -sidebar-mode
+
+bindsym F12 exec rofi -modi "drun" -show "drun" -display-drun "App Launcher :" -line-padding 4 -theme sweetlove -show-icons
+
 bindsym F11 exec rofi -show "window" -theme sweetlove -show-icons
-###bindsym $mod+z exec rofi -modi combi -show combi -combi-modi "window#drun" -display-combi "App Launcher" -display-drun "" -theme sweetlove -icon-theme "Paper" -show-icons
+
+# [ EXPERIMENTAL ]
+# [1]
+bindsym F9 exec rofi -modi drun -show drun -display-drun "Apps : " -line-padding 4 \
+                -columns 2 -padding 30 -hide-scrollbar \
+                -show-icons -drun-icon-theme "Arc-X-D" -font "Noto Sans Regular 11"
+# [2]
+bindsym F10 exec rofi -modi "drun" -show "drun" -display-drun "App Launcher :" -show-icons -columns 2 -padding 30
 
 
 # [ Dmenu ]
@@ -138,11 +155,11 @@ bindsym $mod+Shift+Right move right
 ## < ORIENTATION SPLIT & TOGGLE >
 # New window split in horizontal orientation
 ###bindsym $mod+h split h;exec notify-send -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
-bindsym $mod+h split h;exec dunstify -h string:font:'Roboto Mono 9' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
+bindsym $mod+h split h;exec dunstify -h string:font:'Roboto Mono 8' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
 
 # New window split in vertical orientation
 ###bindsym $mod+v split v;exec notify-send -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
-bindsym $mod+v split v;exec dunstify -h string:font:'Roboto Mono 9' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
+bindsym $mod+v split v;exec dunstify -h string:font:'Roboto Mono 8' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
 
 # Toggle new window orientation split
 bindsym $mod+t split toggle
@@ -226,6 +243,14 @@ for_window [class="(?i)System-config-printer.py"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
 
 
+## < WINDOW TITLE BAR BORDERS >
+# To remove the title bar from the windows (a la r/unixporn), uncomment below:
+default_border pixel 1
+default_floating_border pixel 1
+for_window [class="^.*"] border pixel 1
+for_window [class="Nitrogen"] border pixel 1
+
+
 
 
 ##### :WORKSPACE DETERMINATIONS                                                         #####
@@ -283,10 +308,12 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # assign [class="Thunar"] $ws7
 ###assign [class="Pcmanfm"] $ws7
 ###assign [class="Alacritty"] $ws7
+assign [class="kitty"] $ws7
 
 
 ## < SWITCH TO WORKSPACE WITH URGENT WINDOW AUTOMATICALLY >
 for_window [urgent=latest] focus
+for_window [class="kitty"] focus
 
 
 
@@ -295,33 +322,7 @@ for_window [urgent=latest] focus
 #############################################################################################
 
 ## < POLYBAR SETTINGS >
-#####exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-###exec_always --no-startup-id ~/.config/polybar/launch.sh
-exec_always --no-startup-id /home/les/.config/polybar/launch.sh
-
-
-## < i3BAR SETTINGS >
-# All commented out, but preserved because I might want to use the default bar
-#bar {
-#    status_command    i3blocks -c ~/.config/i3blocks/config/i3blocks.conf
-#    position          top
-#
-#    colors {
-#	background	$tclrbg
-#	statusline	$tclr15
-#	separator	$tclr04
-#
-##	TYPE			BORDER  BKGRND  FONT
-#	focused_workspace	$tclr15 $tclrfg $tclr15
-#	active_workspace	$tclr09 $tclrbg $tclrfg
-#	inactive_workspace	$tclr13 $tclrbg $tclrfg
-#	urgent_workspace	$tclr15 $urgent $tclrfg
-#
-##	FONT
-##	font xft:URWGothic-Book 11
-##	font pango:monospace 9
-#    }
-#}
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 
 
@@ -397,7 +398,13 @@ mode "$mode_system" {
 #   {{ still working this one out }}
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
+###exec --no-startup-id xautolock -time 20 -locker blurlock
 #exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id xautolock -time 2 -locker 'i3lock -i /usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png -p default|win -t'
+###bindsym $mod+l exec ~/.config/i3/scripts/blur-lock.sh
+###bindsym $mod+l exec i3lock -i /usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png -p default|win -t
+###bindsym $mod+l exec --no-startup-id cap-and-blur
+###bindsym $mod+l exec --no-startup-id systemctl lock
 
 
 
@@ -495,6 +502,7 @@ mode "$mode_gaps_outer" {
 # 18. otf-hermit FONT // only for use with kitty
 # 19. noto-fonts FONT // for gtk settings
 # 20. yay
+# 21. slock
 
 
 ## < NOTES >
@@ -528,8 +536,8 @@ mode "$mode_gaps_outer" {
 ##### :STUFF LEFT TO FIX                                                                #####
 #############################################################################################
 
-# 01. figure out the lockscreen: how to auto lock, and then how to customize the look
-# 02. 
+# 01. figure out how to auto lock, and then how to trigger auto lock with power mgmt
+# 02. figure out how to customize rofi to promt for input underneath the cursor
 # 03. 
 # 04. 
 # 05. 
