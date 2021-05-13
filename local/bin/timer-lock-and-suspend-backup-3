@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+xidlehook --not-when-fullscreen --not-when-audio --timer 600 'exec cap-and-blur' '' --timer 300 'systemctl suspend' ''
+
+# 1ST TIMER: lock screen after 600 seconds
+# 2ND TIMER: suspend after another 300 seconds if there's no input from user
+
+## borrowed from YouTube (msjche)
+## -- Automatic Screen Lock and Suspend for Window Managers - Linux Tutorial
+## https://www.youtube.com/watch?v=_wcrytoLufA
+##
+## comment from user: pandashopCZ

@@ -1,0 +1,13 @@
+#!/bin/zsh
+rm /tmp/lock-shot.png
+scrot /tmp/lock-shot.png
+
+convert /tmp/lock-shot.png -blur 0x20 /tmp/lock-shot-blur.png
+convert /tmp/lock-shot-blur.png ~/.local/bin/endeavourOS-logo-001.png -gravity center -composite -matte /tmp/lockscreen.png
+
+i3lock -i /tmp/lockscreen.png
+
+
+## borrowed from YouTube (msjche)
+## -- Automatic Screen Lock and Suspend for Window Managers - Linux Tutorial
+## https://www.youtube.com/watch?v=_wcrytoLufA
