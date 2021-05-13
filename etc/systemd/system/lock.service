@@ -5,9 +5,9 @@ Before=sleep.target
 [Service]
 User=les
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/slock
+;ExecStart=/usr/bin/slock
 ;ExecStart=/home/les/.local/bin/blur-lock.sh
-;ExecStart=/usr/bin/i3lock
+ExecStart=/usr/bin/i3lock -f -B sigma --indicator --ringcolor=7b8748 --linecolor=1f1f1f --ringwrongcolor=d17b49 --insidewrongcolor=d17b4980 --ringvercolor=535c5c --insidecolor=6d715e80 --insidevercolor=444b4b80 --keyhlcolor=647035 bshlcolor=402e2e --verifcolor=c0b18b --wrongcolor=c0b18b
 
 [Install]
 ;WantedBy=suspend.target
