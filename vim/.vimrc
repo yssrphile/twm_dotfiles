@@ -150,11 +150,12 @@ endif
 "
     " [ line highlighting ]
 "set nu rnu
-"set nu
-"set cursorline
-hi LineNr ctermfg=4
-hi CursorLine cterm=NONE ctermbg=DarkGray
-hi CursorLineNr ctermbg=NONE ctermfg=5 cterm=NONE
+set nu
+set cursorline
+hi LineNr ctermfg=2 ctermbg=NONE
+"hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=1
+"""hi CursorLineNr ctermbg=NONE ctermfg=1 cterm=NONE
+hi CursorLineNr ctermfg=1 cterm=NONE
 "
 "
     " [ clear search highlighting after search ]
@@ -172,3 +173,4 @@ nnoremap <CR> :noh<CR><CR>
     "
     " https://unix.stackexchange.com/questions/516380/terminalkitty-colors-altering-vim-color-scheme
 let &t_ut=''
+
