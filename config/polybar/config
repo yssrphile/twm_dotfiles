@@ -41,11 +41,6 @@ CLR13 = #614445
 CLR14 = #585c49
 CLR15 = #978965
 
-CLRTP = #e61f1f1f
-; TO SEE TRANSPARENCY OPTIONS:
-; https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
-
-
 
 ;==========================================================
 
@@ -61,29 +56,30 @@ height = 27
 radius = 0.0
 fixed-center = false
 
-background = ${colors.CLRTP}
+background = ${colors.CLRBG}
 foreground = ${colors.CLRFG}
 
 line-size = 3
 line-color = #f00
 
-border-size = 2
+border-size = 3
 border-color = #00000000
 
 padding-left = 0
 padding-right = 2
 
 module-margin-left = 1
-module-margin-right = 3
+module-margin-right = 2
 
 ;;;font-0 = fixed:pixelsize=10;1
-font-0 = Roboto:pixelsize=11;1
-font-1 = unifont:fontformat=truetype:size=9:antialias=false;0
-font-2 = siji:pixelsize=11;1
+font-0 = Roboto:pixelsize=9;1
+font-1 = unifont:fontformat=truetype:size=7:antialias=false;0
+font-2 = siji:pixelsize=9;1
 
 modules-left = i3
 modules-center = 
 modules-right = pulseaudio memory cpu eth battery date powermenu
+;modules-right = pulseaudio memory cpu eth date powermenu
 
 tray-position = right
 tray-padding = 3
