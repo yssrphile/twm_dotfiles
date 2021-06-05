@@ -55,58 +55,59 @@ endif
 " 
 "
 "
-" MANNUALLY ADDED CONFIGS BELOW #####
+" #### MANNUALLY ADDED CONFIGS BELOW                                                             #####
+" ####################################################################################################
 "
-" enable syntax highlighting
-:syntax enable
+" ### VIMSCRIPT FUNCTIONS ###
+    " git function from https://vi.stackexchange.com/questions/26708/how-to-get-vim-to-show-git-status-in-the-statusline
+"augroup gitstatusline
+"    au!
 "
-" color highlighting
-"highlight Normal ctermbg=DarkGray ctermfg=DarkMagenta
+"    autocmd BufEnter,FocusGained,BufWritePost *
+"        \ let b:git_clean = system(printf("cd %s && git status --porcelain 2>/dev/null", expand('%:p:h:S'))) is# ''
+"augroup end
 "
-" vimscript functions from https://shapeshed.com/vim-statuslines/
-"function! GitBranch()
-"	return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+"function! GitLineInfo2() abort
+"    return get(b:, "git_clean", "") ? "[clean]" : "[changed]"
 "endfunction
 "
-"function! StatuslineGit()
-"	let l:branchname = GitBranch()
-"	return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+"function! GitLineInfo1() abort
+"    return substitute(system("git status -s"), "\n", " ", "g")
 "endfunction
+
 "
-" statusline settings
+"
+" ### STATUSLINE SETTINGS ###
+    " {needs updating -- unsure which website showed how to configure these settings}
+    "
 :set laststatus=2
-":set statusline=%#Folded#
-":set statusline=%#SpellCap#
 :set statusline=%#MatchParen#
 ":set statusline+=%*
 :set statusline+=\ %F
-":set statusline+=\ %#SpellCap#
-":set statusline+=\ %#WildMenu#
-:set statusline+=\ %#QuickFixLine#
+:set statusline+=\ %#Search#
 ":set statusline+=%*
 :set statusline+=\ %y
+">>>
 ":set statusline+=\ %#WildMenu#
 ":set statusline+=%*
-":set statusline+=\ %{StatuslineGit()}
-":set statusline+=\ %#SpellBad#
+":set statusline+=\ %{GitLineInfo2()}
 ":set statusline+=%*
+":set statusline+=\ %#Search#
+">>>
 :set statusline+=\ %m
 :set statusline+=\ %r
 :set statusline+=%=
 :set statusline+=\ [
-":set statusline+=\ %{&fileecoding?&fileecoding:&encoding}
-":set statusline+=\ ]
 :set statusline+=\ %4l:%-4L
 :set statusline+=\ ]
 :set statusline+=\ %7P
 :set statusline+=
 :set statusline+=
+
 "
-" NOTE: to view available highiting schemes, use ":highlight"
-" -- ESC to get out
-
-
-" new color schemes downloaded from vimcolors.com
+"
+" ### COLOR SCHEMES ###
+    " [ default ]
 """:colorscheme blue
 ":colorscheme darkblue
 """:colorscheme default
@@ -125,32 +126,51 @@ endif
 ":colorscheme torte
 ":colorscheme zellner
 "
-" ### NON-DEFAULT THEMES BELOW ###
+    " [ non-default ]
+    "   > new color schemes downloaded from vimcolors.com
 ":colorscheme miramare
-"
 ":colorscheme monokai-phoenix
-"
 ":colorscheme medic_chalk
-"
 ":colorscheme vice
-"
 ":colorscheme isotake
-"
 ":colorscheme focuspoint
-"
 ":colorscheme vim-framer-syntax
-"
 :colorscheme sitruuna
+":colorscheme neodark
+":colorscheme jellybeans
+":colorscheme melange
+":colorscheme eldar
+":colorscheme wwdc16
+
 "
 "
-" line highlighting
+" ### HIGHTLIGHTING RULES ### 
+    " [ enable syntax highlighting ]
+:syntax enable
+"
+    " [ line highlighting ]
 "set nu rnu
-"set nu
-"set cursorline
-hi LineNr ctermfg=4
-hi CursorLine cterm=NONE ctermbg=DarkGray
-hi CursorLineNr ctermbg=NONE ctermfg=5 cterm=NONE
+set nu
+set cursorline
+hi LineNr ctermfg=2 ctermbg=NONE
+"hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=1
+"""hi CursorLineNr ctermbg=NONE ctermfg=1 cterm=NONE
+hi CursorLineNr ctermfg=1 cterm=NONE
 "
 "
-" clear search highlighting after search: just hit ENTER key again
+    " [ clear search highlighting after search ]
+    "   : just hit ENTER key again
 nnoremap <CR> :noh<CR><CR>
+
+"
+"
+" ### BACKGROUND COLOR FIX ###
+    " vim hardcodes background color erase even if the terminfo file does
+    " not contain bce (not to mention that libvte based terminals
+    " incorrectly contain bce in their terminfo files). This causes
+    " incorrect background rendering when using a color theme with a
+    " background color.
+    "
+    " https://unix.stackexchange.com/questions/516380/terminalkitty-colors-altering-vim-color-scheme
+let &t_ut=''
+
