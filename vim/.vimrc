@@ -155,7 +155,7 @@ set cursorline
 hi LineNr ctermfg=2 ctermbg=NONE
 "hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=1
 """hi CursorLineNr ctermbg=NONE ctermfg=1 cterm=NONE
-hi CursorLineNr ctermfg=1 cterm=NONE
+hi CursorLineNr ctermfg=5 cterm=NONE
 "
 "
     " [ clear search highlighting after search ]
