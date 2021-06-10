@@ -1,6 +1,7 @@
 #
 # wm independent hotkeys
 #
+#
 
 # terminal emulator
 super + Return
@@ -13,10 +14,10 @@ super + backslash
 #super + @space
 #	dmenu_run
 super + z
-	rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons -sidebar-mode
+	rofi -modi "drun" -show "drun" -display-drun "App Launcher :" -line-padding 4 -theme sweetlove -show-icons
 
 F12
-	rofi -modi "drun" -show "drun" -display-drun "App Launcher :" -line-padding 4 -theme sweetlove -show-icons
+	rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons -sidebar-mode
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -27,21 +28,30 @@ super + Escape
 #
 
 # quit/restart bspwm
-#super + alt + {q,r}
-#	bspc {quit,wm -r}
-super + shift + r
-	bspc wm -r
+super + alt + {q,r}
+	bspc {quit,wm -r}
+#super + shift + r
+#	bspc wm -r
 
 # close and kill
-super + {_,shift + }w
-	bspc node -{c,k}
+#super + {_,shift + }q
+#	bspc node -{c,k}
+super + shift + q
+	bspc node -c
 
-# lock/sleep
+## lock/sleep
 super + l
 	~/.local/bin/customLock.sh
 
-F4
+super + F4
 	~/.local/bin/customLock.sh && systemctl suspend
+
+## launch firefox
+super + shift + Return
+	firefox -private-window
+
+super + shift + apostrophe
+	firefox
 
 # alternate between the tiled and monocle layout
 #super + m
@@ -56,6 +66,9 @@ super + y
 super + g
 	bspc node -s biggest.window
 
+# balance the sizes of the nodes
+super + b
+	bspc node @/ -B
 #
 # state/flags
 #
@@ -72,7 +85,7 @@ super + ctrl + {m,x,y,z}
 # focus/swap
 #
 
-# focus the node in the given direction
+# focus or swap the node in the given direction
 super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
@@ -116,6 +129,14 @@ super + ctrl + {h,j,k,l}
 super + ctrl + {Left,Down,Up,Right}
 	bspc node -p {west,south,north,east}
 
+# insert receptacles
+super + ctrl + alt + {Left,Down,Up,Right}
+	bspc node --presel-dir {west,south,north,east} -i
+
+# move the (focused?) window into the receptacle
+super + ctrl + alt + m
+	bspc node $(bspc query -N -n) -n $(bspc query -N -n .leaf.\!window)
+
 # preselect the ratio
 super + ctrl + {1-9}
 	bspc node -o 0.{1-9}
@@ -127,6 +148,14 @@ super + ctrl + space
 # cancel the preselection for the focused desktop
 super + ctrl + shift + space
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+# close all of the receptables for the focused desktop
+super + ctrl + shift + x
+	for win in `bspc query -N -n .leaf.\!window -d focused`; do bspc node $win -k ; done;
+
+# close all of the receptables for the all desktops
+super + ctrl + shift + c
+	for win in `bspc query -N -n .leaf.\!window`; do bspc node $win -k ; done;
 
 #
 # move/resize
