@@ -26,6 +26,3 @@ static unsigned int lineheight = 0;         /* -h option; minimum height of a me
  * for example: " /?\"&[]"
  */
 static const char worddelimiters[] = " ";
-
-/* Size of the window border */
-static const unsigned int border_width = 5;

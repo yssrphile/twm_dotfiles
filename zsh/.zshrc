@@ -9,8 +9,11 @@ export ZSH="/home/les/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
+<<<<<<< HEAD:zsh/.zshrc
+=======
 #ZSH_THEME="frisk"
 #ZSH_THEME="junkfood"
+>>>>>>> master:misc/.zshrc
 ZSH_THEME="nanotech"
 
 # Set list of themes to pick from when loading at random
@@ -30,7 +33,7 @@ ZSH_THEME="nanotech"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -48,7 +51,9 @@ ZSH_THEME="nanotech"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
+# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -102,5 +107,18 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls='exa'
 
+<<<<<<< HEAD:zsh/.zshrc
+### MANUALLY ADDED CONFIGS BELOW ###
+
+alias ls='exa'
+alias cat='bat'
+
+
+path+=('/home/les/.local/bin')
+
+
+neofetch
+=======
 ### MANUALLY ADDED CONFIG BELOW ###
 ##neofetch
+>>>>>>> master:misc/.zshrc

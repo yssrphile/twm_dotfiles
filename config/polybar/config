@@ -62,7 +62,11 @@ foreground = ${colors.CLRFG}
 line-size = 3
 line-color = #f00
 
+<<<<<<< HEAD
+border-size = 3
+=======
 border-size = 2
+>>>>>>> master
 border-color = #00000000
 
 padding-left = 0
@@ -72,10 +76,18 @@ module-margin-left = 1
 module-margin-right = 2
 
 ;;;font-0 = fixed:pixelsize=10;1
+<<<<<<< HEAD
+font-0 = Roboto:pixelsize=9;1
+font-1 = unifont:fontformat=truetype:size=7:antialias=false;0
+font-2 = siji:pixelsize=9;1
+
+#modules-left = i3 bspwm herbstluftwm workspaces
+=======
 font-0 = Roboto:pixelsize=11;1
 font-1 = unifont:fontformat=truetype:size=9:antialias=false;0
 font-2 = siji:pixelsize=11;1
 
+>>>>>>> master
 modules-left = i3
 modules-center = 
 modules-right = pulseaudio memory cpu eth battery date powermenu
@@ -144,6 +156,108 @@ label-urgent-padding = 2
 ; label-separator = |
 
 
+<<<<<<< HEAD
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%
+label-focused-background = ${colors.CLR03}
+label-focused-underline = ${colors.CLR02}
+label-focused-padding = 2
+
+label-occupied = %index%
+label-occupied-padding = 2
+label-occupied-background = ${colors.CLR08}
+label-occupied-underline = ${colors.CLR12}
+
+label-urgent = %index%!
+label-urgent-background = ${colors.CLR09}
+label-urgent-padding = 2
+
+label-empty = %index%
+label-empty-foreground = ${colors.CLR14}
+label-empty-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/herbstluftwm]
+type = internal/herbstluftwm
+
+ws-icon-0 = "I; "
+ws-icon-1 = "II; "
+ws-icon-2 = "III; "
+ws-icon-4 = "V; "
+ws-icon-5 = "VI; "
+ws-icon-3 = "IV; "
+ws-icon-6 = "VII; "
+ws-icon-7 = "VIII; "
+ws-icon-8 = "IX; "
+
+label-focused = %icon%
+label-focused-background = ${colors.CLR03}
+label-focused-underline = ${colors.CLR02}
+label-focused-padding = 2
+
+label-occupied = %icon%
+label-occupied-padding = 2
+label-occupied-background = ${colors.CLR08}
+label-occupied-underline = ${colors.CLR12}
+
+label-urgent = %icon%!
+label-urgent-background = ${colors.CLR09}
+label-urgent-padding = 2
+
+label-empty = %icon%
+label-empty-foreground = ${colors.CLR14}
+label-empty-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/workspaces]
+type = internal/xworkspaces
+pin-workspaces = false
+enable-click = true
+enable-scroll = false
+format-padding = 0
+;icon-0 = Web;
+;icon-1 = Term;
+;icon-2 = Work;
+;icon-3 = Org;
+;icon-4 = Media;
+;icon-5 = Mail;
+;icon-6 = Steam;
+;icon-7 = Misc;
+;icon-8 = Extra;
+;;icon-9 = 10;?
+;;icon-default = ""
+;
+format = " <label-state> "
+;
+label-active = "%index%"
+label-active-foreground = ${colors.CLRBG}
+label-active-background = ${colors.CLR03}
+;label-active-underline = #FFFFFF
+label-active-padding = 2
+;
+label-occupied = "%index%"
+label-occupied-foreground = ${colors.CLRBG}
+label-occupied-background = ${colors.CLR08}
+;label-occupied-underline = #FFFFFF
+label-occupied-padding = 2
+;
+;label-empty = "%index%"
+label-empty-padding = 2
+;label-empty-foreground = #000000
+;label-empty-underline = #000000
+;label-empty-background = #D05704
+
+
+=======
+>>>>>>> master
 [module/cpu]
 type = internal/cpu
 interval = 2

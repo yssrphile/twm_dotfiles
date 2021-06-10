@@ -1,0 +1,336 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+
+; [COLOR DEFINITIONS]
+;
+[colors]
+; navy-and-ivory  (https://terminal.sexy/)
+CLRBG = #021b21
+CLR00 = #032c36
+CLR01 = #c2454e
+CLR02 = #7cbf9e
+CLR03 = #8a7a63
+CLR04 = #2e3340
+CLR05 = #ff5879
+CLR06 = #44b5b1
+CLR07 = #f2f1b9
+
+CLRFG = #e8dfd6
+CLR08 = #065f73
+CLR09 = #ef5847
+CLR10 = #a2d9b1
+CLR11 = #beb090
+CLR12 = #61778d
+CLR13 = #ff99a1
+CLR14 = #9ed9d8
+CLR15 = #f6f6c9
+
+
+;==========================================================
+
+; [BAR DEFINITIONS]
+;
+;[bar/example]
+[bar/bar01]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 27
+;offset-x = 1%
+;offset-y = 1%
+radius = 0.0
+fixed-center = false
+
+background = ${colors.CLRBG}
+foreground = ${colors.CLRFG}
+
+line-size = 3
+line-color = #f00
+
+border-size = 2
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = fixed:pixelsize=10;1
+font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+font-2 = siji:pixelsize=10;1
+
+modules-left = i3
+modules-center = 
+modules-right = pulseaudio memory cpu eth battery date powermenu
+
+tray-position = right
+tray-padding = 3
+tray-detached = false
+tray-background = ${colors.CLR04}
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+[bar/bar02]
+
+
+
+;==========================================================
+
+; [MODULE DEFINITIONS]
+;
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+
+pin-workspaces = true
+strip-wsnumbers = true
+index-sort = true
+
+enable-click = true
+enable-scroll = false
+wrapping-scroll = false
+reverse-scroll = false
+
+fuzzy-match = true
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.CLR02}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colors.CLR03}
+label-focused-underline= ${colors.CLR02}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.CLR09}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.CLR11}
+format-underline = ${colors.CLR09}
+label = %percentage:2%%
+
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.CLR11}
+format-underline = ${colors.CLR08}
+label = %percentage_used%%
+
+
+;>>[module/wlan]
+;>>type = internal/network
+;>>interface = net1
+;>>interval = 3.0
+;>>
+;>>format-connected = <ramp-signal> <label-connected>
+;>>format-connected-underline = ${colors.CLR13}
+;>>label-connected = %essid%
+;>>
+;>>format-disconnected =
+;>>;format-disconnected = <label-disconnected>
+;>>;format-disconnected-underline = ${self.format-connected-underline}
+;>>;label-disconnected = %ifname% disconnected
+;>>;label-disconnected-foreground = ${colors.CLR11}
+;>>
+;>>ramp-signal-0 = 
+;>>ramp-signal-1 = 
+;>>ramp-signal-2 = 
+;>>ramp-signal-3 = 
+;>>ramp-signal-4 = 
+;>>ramp-signal-foreground = ${colors.CLR11}
+
+
+[module/eth]
+type = internal/network
+interface = enp0s3
+interval = 3.0
+
+format-connected-underline = ${colors.CLR10}
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.CLR11}
+label-connected = %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.CLR11}
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.CLR11}
+format-underline = ${colors.CLR12}
+
+label = %date% %time%
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume><bar-volume>
+label-volume = "VOL %percentage%% "
+label-volume-foreground = ${root.foreground}
+label-volume-underline = ${colors.CLR06}
+
+label-muted = "  muted  "
+label-muted-foreground = #666
+label-muted-underline = ${colors.CLR06}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.CLR11}
+;underlines
+bar-volume-fill-underline = ${colors.CLR06}
+bar-volume-empty-underline = ${colors.CLR06}
+bar-volume-indicator-underline = ${colors.CLR06}
+
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = ${colors.CLR13}
+
+format-discharging = <animation-discharging> <label-discharging>
+format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = " "
+format-full-prefix-foreground = ${colors.CLR11}
+format-full-underline = ${self.format-charging-underline}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-foreground = ${colors.CLR11}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-foreground = ${colors.CLR11}
+animation-charging-framerate = 750
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-foreground = ${colors.CLR11}
+animation-discharging-framerate = 750
+
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.CLR14}
+label-close =  cancel
+label-close-foreground = ${colors.CLR14}
+label-separator = |
+label-separator-foreground = ${colors.CLR11}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = systemctl reboot
+
+menu-2-0 = power off
+menu-2-0-exec = systemctl poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+
+
+;==========================================================
+
+; [MISCELLANEOUS DEFINITIONS]
+;
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini

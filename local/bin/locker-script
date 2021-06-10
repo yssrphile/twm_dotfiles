@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+exec xautolock -detectsleep -time 10 -locker "exec i3lock -i /usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png -p default|win -t" -notify 30 -notifier "dunst-notify -u critical -t 10000 -- 'LOCKING screen in 30 seconds'" &
+
+exec xidlehook --not-when-fullscreen --timer 1200 "systemctl suspend" -
+
+
+
+## borrowed from YouTube (msjche)
+## -- Automatic Screen Lock and Suspend for Window Managers - Linux Tutorial
+## https://www.youtube.com/watch?v=_wcrytoLufA

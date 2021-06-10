@@ -1,0 +1,18 @@
+The following are the custom plugins I use for ZSH, and where to get them:
+
+[01] auto-suggestions
+>install via Arch repo  -OR-
+>manual install: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
+
+[02] syntax-highlighting
+>install via Arch repo  -OR-
+>manual install: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
+
+[03] autojump
+>manual install only: https://github.com/wting/autojump
+    [need to be in the "~/.oh-my-zsh/custom/plugins" directory, then run the git clone]
+
+[04] auto-ls
+> manual install only: https://github.com/desyncr/auto-ls
+    [NOTE: I have not been able to get this one working]
+

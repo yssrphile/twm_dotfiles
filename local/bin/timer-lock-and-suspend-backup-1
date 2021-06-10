@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+xidlehook \
+	--not-when-fullscreen \
+	--not-when-audio \
+	#lock screen after 600 seconds
+	--timer 600 \
+		'exec i3lock -i \
+		/usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png \
+		-p default|win -t' \
+		'' \
+	#suspend after another 300 seconds if there's no input from user
+	--timer 300 \
+		'systemctl suspend' \
+		''
+
+
+## borrowed from YouTube (msjche)
+## -- Automatic Screen Lock and Suspend for Window Managers - Linux Tutorial
+## https://www.youtube.com/watch?v=_wcrytoLufA
+##
+## comment from user: pandashopCZ

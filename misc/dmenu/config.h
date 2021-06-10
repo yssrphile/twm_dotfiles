@@ -6,12 +6,12 @@ static int centered = 0;                    /* -c option; centers dmenu on scree
 static int min_width = 500;                    /* minimum width when centered */
 /* -fn option overrides fonts[0]; default X11 font or font set */
 static const char *fonts[] = {
-	"monospace:size=9"
+	"ubuntu:size=12"
 };
 static const char *prompt      = NULL;      /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
 	/*     fg         bg       */
-	[SchemeNorm] = { "#f6f6c9", "#021b21" },
+	[SchemeNorm] = { "#2e3340", "#021b21" },
 	[SchemeSel] = { "#032c36", "#a2d9b1" },
 	[SchemeSelHighlight] = { "#8a7a63", "#beb090" },
 	[SchemeNormHighlight] = { "#9ed9d8", "#44b5b1" },
