@@ -18,7 +18,7 @@ if v:progname =~? "evim"
 endif
 
 " Get the defaults that most users want.
-source $VIMRUNTIME/defaults.vim
+"""source $VIMRUNTIME/defaults.vim
 
 if has("vms")
   set nobackup		" do not keep a backup file, use versions instead
@@ -55,59 +55,54 @@ endif
 " 
 "
 "
-" #### MANNUALLY ADDED CONFIGS BELOW                                                             #####
-" ####################################################################################################
+" MANNUALLY ADDED CONFIGS BELOW #####
 "
-" ### VIMSCRIPT FUNCTIONS ###
-    " git function from https://vi.stackexchange.com/questions/26708/how-to-get-vim-to-show-git-status-in-the-statusline
-"augroup gitstatusline
-"    au!
+" enable syntax highlighting
+:syntax enable
 "
-"    autocmd BufEnter,FocusGained,BufWritePost *
-"        \ let b:git_clean = system(printf("cd %s && git status --porcelain 2>/dev/null", expand('%:p:h:S'))) is# ''
-"augroup end
+" color highlighting
+"highlight Normal ctermbg=DarkGray ctermfg=DarkMagenta
 "
-"function! GitLineInfo2() abort
-"    return get(b:, "git_clean", "") ? "[clean]" : "[changed]"
+" vimscript functions from https://shapeshed.com/vim-statuslines/
+"function! GitBranch()
+"	return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
 "endfunction
 "
-"function! GitLineInfo1() abort
-"    return substitute(system("git status -s"), "\n", " ", "g")
+"function! StatuslineGit()
+"	let l:branchname = GitBranch()
+"	return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 "endfunction
-
 "
-"
-" ### STATUSLINE SETTINGS ###
-    " {needs updating -- unsure which website showed how to configure these settings}
-    "
+" statusline settings
 :set laststatus=2
+":set statusline=%#Folded#
+":set statusline=%#SpellCap#
 :set statusline=%#MatchParen#
 ":set statusline+=%*
 :set statusline+=\ %F
-:set statusline+=\ %#Search#
+":set statusline+=\ %#SpellCap#
+":set statusline+=\ %#WildMenu#
+:set statusline+=\ %#Folded#
 ":set statusline+=%*
 :set statusline+=\ %y
-">>>
 ":set statusline+=\ %#WildMenu#
 ":set statusline+=%*
-":set statusline+=\ %{GitLineInfo2()}
+":set statusline+=\ %{StatuslineGit()}
+":set statusline+=\ %#SpellBad#
 ":set statusline+=%*
-":set statusline+=\ %#Search#
-">>>
 :set statusline+=\ %m
 :set statusline+=\ %r
 :set statusline+=%=
 :set statusline+=\ [
+":set statusline+=\ %{&fileecoding?&fileecoding:&encoding}
+":set statusline+=\ ]
 :set statusline+=\ %4l:%-4L
 :set statusline+=\ ]
 :set statusline+=\ %7P
 :set statusline+=
 :set statusline+=
 
-"
-"
-" ### COLOR SCHEMES ###
-    " [ default ]
+" new color schemes downloaded from vimcolors.com
 """:colorscheme blue
 ":colorscheme darkblue
 """:colorscheme default
@@ -126,55 +121,33 @@ endif
 ":colorscheme torte
 ":colorscheme zellner
 "
-    " [ non-default ]
-    "   > new color schemes downloaded from vimcolors.com
+" ### NON-DEFAULT THEMES BELOW ###
 ":colorscheme miramare
+"
 ":colorscheme monokai-phoenix
-":colorscheme medic_chalk
+"
+:colorscheme medic_chalk
+"
 ":colorscheme vice
+"
 ":colorscheme isotake
+"
 ":colorscheme focuspoint
+"
 ":colorscheme vim-framer-syntax
-:colorscheme sitruuna
-":colorscheme neodark
-":colorscheme jellybeans
-":colorscheme melange
-":colorscheme eldar
-":colorscheme wwdc16
-
+"
+"BELOW IS MY 2ND FAVORITE
+":colorscheme sitruuna
 "
 "
-" ### HIGHTLIGHTING RULES ### 
-    " [ enable syntax highlighting ]
-:syntax enable
-"
-    " [ line highlighting ]
+" line highlighting
 "set nu rnu
-set nu
-set cursorline
-hi LineNr ctermfg=2 ctermbg=NONE
-"hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=1
-"""hi CursorLineNr ctermbg=NONE ctermfg=1 cterm=NONE
-<<<<<<< HEAD
-hi CursorLineNr ctermfg=5 cterm=NONE
-=======
-hi CursorLineNr ctermfg=1 cterm=NONE
->>>>>>> master
+"set nu
+"set cursorline
+hi LineNr ctermfg=4
+hi CursorLine cterm=NONE ctermbg=DarkGray
+hi CursorLineNr ctermbg=NONE ctermfg=5 cterm=NONE
 "
 "
-    " [ clear search highlighting after search ]
-    "   : just hit ENTER key again
+" clear search highliting after search: just hit ENTER key again
 nnoremap <CR> :noh<CR><CR>
-
-"
-"
-" ### BACKGROUND COLOR FIX ###
-    " vim hardcodes background color erase even if the terminfo file does
-    " not contain bce (not to mention that libvte based terminals
-    " incorrectly contain bce in their terminfo files). This causes
-    " incorrect background rendering when using a color theme with a
-    " background color.
-    "
-    " https://unix.stackexchange.com/questions/516380/terminalkitty-colors-altering-vim-color-scheme
-let &t_ut=''
-
