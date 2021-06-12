@@ -1,13 +1,14 @@
-/******************************************************************************
+/**************************************************************
  * ROFI Color theme
  * User: DeanPdx
  * Copyright: Dean Davidson
- ******************************************************************************/
+ **************************************************************/
 
 * {
-    /**** Solarized colors ****
-    * NOTE: I am including all of them even though I am using a sub-set. I keep
-    * tweaking my theme and having access to all of the colors here is handy. */
+    /**** sweetlove -- terminal.sexy colors ****
+    * NOTE: I am including all of them even though I am using a
+    * sub-set. I keep tweaking my theme and having access to 
+    * all of the colors here is handy. */
 
     /* special */
     colorfg: #c0b18b;
