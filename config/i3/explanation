@@ -1,0 +1,15 @@
+##### Per YoutTube:  https://www.youtube.com/watch?v=_wcrytoLufA                 #####
+
+I created the ~/.local/bin directory and added some scripts there.  Then, I edited 
+my ~/.zshrc file to add that directory to my PATH$ definition.
+
+The purpose was so that these scripts could run from anywhere for my user.  Which 
+means that programs like rofi (or dmenu) could run them.  I could call these scripts 
+from within my ~/.config/i3/config file, for power manage  ment.
+
+I found out how to add directories to my $PATH from stack overflow:
+https://stackoverflow.com/questions/11530090/adding-a-new-entry-to-the-path-variable-in-zsh/18077919#18077919
+
+I got to the YT video from a DDG search:
+https://duckduckgo.com/?t=ffab&q=i3wm+trigger+screen+lock+on+sleep&ia=web
+
