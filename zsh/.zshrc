@@ -9,16 +9,11 @@ export ZSH="/home/les/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-<<<<<<< HEAD:zsh/.zshrc
-=======
-#ZSH_THEME="frisk"
-#ZSH_THEME="junkfood"
->>>>>>> master:misc/.zshrc
 ZSH_THEME="nanotech"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -39,7 +34,7 @@ DISABLE_UPDATE_PROMPT="true"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -72,8 +67,8 @@ COMPLETION_WAITING_DOTS="true"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting)
@@ -105,9 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ls='exa'
 
-<<<<<<< HEAD:zsh/.zshrc
 ### MANUALLY ADDED CONFIGS BELOW ###
 
 alias ls='exa'
@@ -118,7 +111,3 @@ path+=('/home/les/.local/bin')
 
 
 neofetch
-=======
-### MANUALLY ADDED CONFIG BELOW ###
-##neofetch
->>>>>>> master:misc/.zshrc
