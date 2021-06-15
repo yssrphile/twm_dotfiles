@@ -56,10 +56,12 @@ bindsym $mod+Shift+q kill
 bindsym $mod+Shift+r restart
 
 
-## < START NETWORK MANAGER >
+## < START TRAY APPLICATIONS >
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 #   and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+# Blueberry is for managing blueooth devices from the system tray
+exec --no-startup-id blueberry-tray
 
 
 ## < START PICOM >
@@ -75,6 +77,8 @@ exec --no-startup-id nitrogen --restore; sleep 1
 ###exec --no-startup-id locker-script
 ###exec_always --no-startup-id timer-lock-and-suspend
 exec --no-startup-id xfce4-power-manager
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+#exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 
 
 ## < KEYBIND BLOCK >
@@ -107,13 +111,20 @@ bindsym $mod+Shift+apostrophe exec firefox
 bindsym $mod+n exec pcmanfm
 #bindsym $mod+m exec echo -e "\a"; exec kitty -e "ranger"
 #bindsym $mod+m exec kitty -e "ranger", [urgent=oldest] move container to workspace number $ws7
-bindsym $mod+m workspace number $ws7; exec kitty -e "ranger"
+#bindsym $mod+m workspace number $ws7; exec kitty -e "ranger"
+bindsym $mod+m exec kitty -e "ranger"
 
 
 ## < VOLUME CONTROLS >
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volumeup.sh
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volumedown.sh
 bindsym XF86AudioMute exec --no-startup-id ~/.config/i3/scripts/mutevolume.sh
+
+
+## < BACKLIGHT CONTROLS >
+bindsym XF86MonBrightnesUp exec xbacklight +10
+bindsym XF86MonBrightnessDown exec xbacklight -10
+
 
 ## < OPEN GTOP >
 bindsym $mod+g exec alacritty -e "gtop"
@@ -388,7 +399,8 @@ client.background	#ffffff
 #############################################################################################
 
 ## < LOGOUT, SHUTDOWN, RESTART, AND LOCKING >
-bindsym $mod+Shift+e mode "$mode_system"
+###bindsym $mod+Shift+e mode "$mode_system"
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/i3/scripts/shutdown_menu -p rofi -c
 
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 
@@ -415,10 +427,11 @@ mode "$mode_system" {
 
 ## < LOCK THE SCREEN >
 #   {{ still working this one out }}
-exec --no-startup-id locker-script
+#exec --no-startup-id locker-script
 ###exec --no-startup-id xautolock -time 2 -locker $locker_cmd; sleep 1
+###exec --no-startup-id xset s 480 dpms 600 600 600
 ###bindsym $mod+l exec i3lock -i /usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png -p default|win -t
-bindsym $mod+l exec --no-startup-id $locker_cmd
+#bindsym $mod+l exec --no-startup-id $locker_cmd
 
 #: }}}
 
@@ -445,7 +458,7 @@ smart_borders on
 
 
 ## < ON-THE-FLY GAPS ADJUSTMENT >
-# Press $mod+Shift+g to enter the gap mode. 
+# Press $mod+Shift+g to enter the gap mode.
 #   Choose o or i for modifying outer/inner gaps.
 #   Press one of + / - (in-/decrement for current workspace) 
 #     or 0 (remove gaps for current workspace). If you also press Shift 
@@ -494,55 +507,73 @@ mode "$mode_gaps_outer" {
 #############################################################################################
 
 ## < REQUIRED APPS >
-# 01. i3-gaps (instead of i3-wm)
+# 01. i3-gaps* (instead of i3-wm)
 # 02. polybar
-# 03. rofi
-# 04. nitrogen
+# 03. rofi*
+# 04. nitrogen*
 # 05. picom
-# 06. termite -- [ newly obsolete: devs suggest replace w/ alacritty ]
+# 06. mousepad* (OR leafad as ALT)
 # 07. alacritty -- new default terminal
 # 08. kitty
-# 09. firefox
-# 10. thunar (OR pcmanfm as ALT)
+# 09. firefox*
+# 10. thunar* (OR pcmanfm as ALT)
 # 11. ranger
 # 12. exa -- replace "ls" command
 # 13. vim (and nvim/neovim ??)
-# 14. dunst
+# 14. dunst*
 # 15. zsh (and oh-my-zsh)
 # 16. bat -- replace "cat" command
 # 17. ttf-roboto-mono FONT // i3, polybar, termite, alacritty
 # 18. otf-hermit FONT // only for use with kitty
-# 19. noto-fonts FONT // for gtk settings
-# 20. yay
-# 21. i3lock-color (OR i3lock, OR slock if unavailable)
-# 22. xfce4-power-manager
+# 19. noto-fonts* FONT // for gtk settings
+# 20. siji FONT // for polybar; from the AUR
+# 21. yay
+# 22. i3lock-color+ (OR i3lock, OR slock if unavailable)
+# 23. xfce4-power-manager+
+# 24. git
+# 25. wget (OR curl as ALT)
+# 26. zsh-autosuggestions
+# 27. zsh-syntax-highlighting
+# 28. autojump // from the AUR
+# 29. neofetch
+# 30. gtop
 
 
 ## < NOTES >
 # {02) polybar: need to make sure the "launch.sh" file is executable
-#   need to run "chmod 755" on that file
+#   need to run "chmod +x" (or "chmod 755") on that file
 #
-# {08} kitty: configured to use a light color theme to stand out from termite
-#   UPDATE: re-cofigured to use a dark color theme, since alacritty is replacing termite
+# {08} kitty: using instead of termite; configured to use a dark theme
 #
 # {10} thunar: also uses "leafpad" for opening plaing text files
 # {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
 #   gtk-icon-theme-name = "ZZZZZ"
-#   Run  ls -al /usr/share/icons  to see the list of installed themes
-#   -OR-  Run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
+#   run  ls -al /usr/share/icons  to see the list of installed themes
+#   -OR-  run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
 #
 #   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
 #   >> THEMES USED CURRENTLY: "Arc" gtk theme, "Paper" icon theme
 # 
 # {11} ranger: may consider installing optional dependency "w3m" to preview html files
 #
+# {13} vim: need to create the "~/.vim/colors" directory and copy the "sitruuna" colorscheme there
+#
 # {14} dunst: required to display notify-send calls when toggling window split
 # 
 # {15} zsh/oh-my-zsh: zshrc uses neofetch
+#
+# {21} i3-lock(-color): 
+# {22} xfce4-power-manager: 
+#   >> will not need to be installed if the xfce DE was installed first
+#
+# {25} zsh-autosuggestions: 
+# {26} zsh-syntax-highlighting: 
+#   >> both plugin directories need to copied from "usr/share/zsh/plugins/"
+#   >> into "~/.oh-my-zsh/" so that they can be properly recognized
 
 # Consult the Arch Wiki to figure out where to copy standard configs from/to
 
-# This config was built on top of EndeavorOS
+# This config was built on top of EndeavourOS
 
 #: }}}
 
