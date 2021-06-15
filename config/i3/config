@@ -580,8 +580,8 @@ mode "$mode_gaps_outer" {
 ##### :STUFF LEFT TO FIX  {{{                                                           #####
 #############################################################################################
 
-# 01. figure out how to auto lock (with either xautolock or xidlehook)
-# 02. figure out how to customize rofi to promt for input underneath the cursor
+# 01. figure out how to customize rofi to promt for input underneath the cursor
+# 02. 
 # 03. 
 # 04. 
 # 05. 
