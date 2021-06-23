@@ -523,9 +523,9 @@ mode "$mode_gaps_outer" {
 # 12. exa -- replace "ls" command
 # 13. vim (and nvim/neovim ??)
 # 14. dunst*
-# 15. zsh (and oh-my-zsh)
+# 15. zsh (AND oh-my-zsh)
 # 16. bat -- replace "cat" command
-# 17. ttf-roboto-mono FONT // i3, polybar, termite, alacritty
+# 17. ttf-roboto-mono FONT // i3, polybar, alacritty
 # 18. otf-hermit FONT // only for use with kitty
 # 19. noto-fonts* FONT // for gtk settings
 # 20. siji FONT // for polybar; from the AUR
@@ -539,7 +539,7 @@ mode "$mode_gaps_outer" {
 # 28. autojump // from the AUR
 # 29. neofetch
 # 30. gtop
-# 31. fd -- replace "find" oommand 
+# 31. fd -- replace "find" command 
 
 
 ## < NOTES >
@@ -558,6 +558,11 @@ mode "$mode_gaps_outer" {
 #   >> THEMES USED CURRENTLY: "Arc" gtk theme, "Paper" icon theme
 # 
 # {11} ranger: may consider installing optional dependency "w3m" to preview html files
+#
+# {12} exa:
+# {16} bat:
+# {31} fd:
+#   >> these need to be aliased in "~/.zshrc"
 #
 # {13} vim: need to create the "~/.vim/colors" directory and copy the "sitruuna" colorscheme there
 #
