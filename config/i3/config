@@ -539,6 +539,7 @@ mode "$mode_gaps_outer" {
 # 28. autojump // from the AUR
 # 29. neofetch
 # 30. gtop
+# 31. fd -- replace "find" oommand 
 
 
 ## < NOTES >
