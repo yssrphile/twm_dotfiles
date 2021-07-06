@@ -528,7 +528,7 @@ mode "$mode_gaps_outer" {
 # 17. ttf-roboto-mono FONT // i3, polybar, alacritty
 # 18. otf-hermit FONT // only for use with kitty
 # 19. noto-fonts* FONT // for gtk settings
-# 20. siji FONT // for polybar; from the AUR
+# 20. [neo]siji FONT // for polybar; from the AUR
 # 21. yay
 # 22. i3lock-color+ (OR i3lock, OR slock if unavailable)
 # 23. xfce4-power-manager+
