@@ -518,10 +518,10 @@ mode "$mode_gaps_outer" {
 # 07. alacritty -- new default terminal
 # 08. kitty
 # 09. firefox*
-# 10. thunar* (OR pcmanfm as ALT)
+# 10. pcmanfm (OR "Default" file manager as ALT)
 # 11. ranger
 # 12. exa -- replace "ls" command
-# 13. vim (and nvim/neovim ??)
+# 13. vim AND neovim
 # 14. dunst*
 # 15. zsh (AND oh-my-zsh)
 # 16. bat -- replace "cat" command
@@ -531,7 +531,7 @@ mode "$mode_gaps_outer" {
 # 20. [neo]siji FONT // for polybar; from the AUR
 # 21. yay
 # 22. i3lock-color+ (OR i3lock, OR slock if unavailable)
-# 23. xfce4-power-manager+
+# 23. xfce4-power-manager+ (OR "Default" power manager as ALT)
 # 24. git
 # 25. wget (OR curl as ALT)
 # 26. zsh-autosuggestions
@@ -540,6 +540,7 @@ mode "$mode_gaps_outer" {
 # 29. neofetch
 # 30. gtop
 # 31. fd -- replace "find" command 
+# 32. blueberry
 
 
 ## < NOTES >
@@ -560,6 +561,7 @@ mode "$mode_gaps_outer" {
 # {11} ranger: may consider installing optional dependency "w3m" to preview html files
 #
 # {12} exa:
+# {13} nvim:
 # {16} bat:
 # {31} fd:
 #   >> these need to be aliased in "~/.zshrc"
