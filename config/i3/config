@@ -128,7 +128,8 @@ bindsym XF86MonBrightnessDown exec xbacklight -10
 
 
 ## < OPEN GTOP >
-bindsym $mod+g exec $def_term -e "gtop"
+#bindsym $mod+g exec alacritty -e "gtop"
+bindsym $mod+y exec kitty -e "gtop"
 
 
 ## < GRAB SCREENSHOT >
@@ -542,6 +543,7 @@ mode "$mode_gaps_outer" {
 # 30. gtop
 # 31. fd -- replace "find" command 
 # 32. blueberry
+# 33. fontawesome FONT // for rofi exit menu
 
 
 ## < NOTES >
