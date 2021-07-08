@@ -97,7 +97,8 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 ## < OPEN A TERMINAL >
 #bindsym $mod+Return exec i3-sensible-terminal
 ###bindsym $mod+Return exec termite
-bindsym $mod+Return exec alacritty
+set $def_term "alacritty"
+bindsym $mod+Return exec $def_term
 bindsym $mod+backslash exec kitty
 
 
@@ -127,7 +128,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -10
 
 
 ## < OPEN GTOP >
-bindsym $mod+g exec alacritty -e "gtop"
+bindsym $mod+g exec $def_term -e "gtop"
 
 
 ## < GRAB SCREENSHOT >
@@ -357,7 +358,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 ## < DEFINITION OF STANDARD COLORS >
 # FROM: terminal.sexy
 # STYLE: sweetlove
-#   Also used for termite and alacritty
+#   Also used for $def_term
 set $tclrbg #1f1f1f
 set $tclr00 #4a3637
 set $tclr01 #d17b49
