@@ -573,7 +573,8 @@ mode "$mode_gaps_outer" {
 #
 # {14} dunst: required to display notify-send calls when toggling window split
 # 
-# {15} zsh/oh-my-zsh: zshrc uses neofetch
+# {15} zsh/oh-my-zsh: zshrc uses neofetch --- to make zsh default manually, run the following (terminal):
+#   >> chsh -s $(which zsh)
 #
 # {21} i3-lock(-color): 
 # {22} xfce4-power-manager: 
@@ -581,7 +582,7 @@ mode "$mode_gaps_outer" {
 #
 # {25} zsh-autosuggestions: 
 # {26} zsh-syntax-highlighting: 
-#   >> both plugin directories need to copied from "usr/share/zsh/plugins/"
+#   >> both plugin directories need to copied from "/usr/share/zsh/plugins/"
 #   >> into "~/.oh-my-zsh/" so that they can be properly recognized
 
 # Consult the Arch Wiki to figure out where to copy standard configs from/to
