@@ -106,6 +106,7 @@ source $ZSH/oh-my-zsh.sh
 alias ls='exa'
 alias cat='bat'
 alias find='fd'
+alias vim='nvim'
 
 
 path+=('/home/les/.local/bin')
