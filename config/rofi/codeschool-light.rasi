@@ -3,50 +3,50 @@
  **************************************************************/
 
 * {
-    /**** sweetlove -- terminal.sexy colors ****
+    /**** codeschool.dark -- terminal.sexy colors ****
     * NOTE: I am including all of them even though I am using a
     * sub-set. I keep tweaking my theme and having access to 
     * all of the colors here is handy. */
 
     /* special */
-    colorfg: #c0b18b;
-    colorbg: #1f1f1f;
-    colorcs: #c0b18b;
+    colorfg: #2a343a;
+    colorbg: #b5d8f6;
+    colorcs: #2a343a;
 
     /* black */
-    color00: #4a3637;
-    color08: #402e2e;
+    color00: #2a343a;
+    color08: #3f4944;
 
     /* red */
-    color01: #d17b49;
-    color09: #ac5d2f;
+    color01: #2a5491;
+    color09: #2a5491;
 
     /* green */
-    color02: #7b8748;
-    color10: #647035;
+    color02: #237986;
+    color10: #237986;
 
     /* yellow */
-    color03: #af865a;
-    color11: #8f6840;
+    color03: #a03b1e;
+    color11: #a03b1e;
 
     /* blue */
-    color04: #535c5c;
-    color12: #444b4b;
+    color04: #484d79;
+    color12: #484d79;
 
     /* magenta */
-    color05: #775759;
-    color13: #614445;
+    color05: #c59820;
+    color13: #c59820;
 
     /* cyan */
-    color06: #6d715e;
-    color14: #585c49;
+    color06: #b02f30;
+    color14: #b02f30;
 
     /* white */
-    color07: #c0b18b;
-    color15: #978965;
+    color07: #9ea7a6;
+    color15: #b5d8f6;
 
 
-    /* Sweetlove Theme */
+    /* CodeSchool-Dark Theme */
     transparent-background:      rgba ( 0, 0, 0, 0 % );
     foreground:                  @color13;
     background:                  rgba ( 0, 0, 0, 90 % );
