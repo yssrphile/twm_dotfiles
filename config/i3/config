@@ -129,7 +129,8 @@ bindsym XF86MonBrightnessDown exec xbacklight -10
 
 ## < OPEN GTOP >
 #bindsym $mod+g exec alacritty -e "gtop"
-bindsym $mod+y exec kitty -e "gtop"
+#bindsym $mod+y exec kitty -e "gtop"
+bindsym $mod+y exec kitty -e "glances"
 
 
 ## < GRAB SCREENSHOT >
@@ -336,7 +337,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # assign [class="Thunar"] $ws7
 ###assign [class="Pcmanfm"] $ws7
 ###assign [class="Alacritty"] $ws7
-###assign [class="kitty"] $ws7
+assign [class="kitty"] $ws4
 
 
 ## < SWITCH TO WORKSPACE WITH URGENT WINDOW AUTOMATICALLY >
@@ -540,10 +541,12 @@ mode "$mode_gaps_outer" {
 # 27. zsh-syntax-highlighting
 # 28. autojump // from the AUR
 # 29. neofetch
-# 30. gtop
+# 30. gtop (OR glances as ALT)
 # 31. fd -- replace "find" command 
 # 32. blueberry
 # 33. fontawesome FONT // for rofi exit menu
+# 34. lxappearance // for setting gtk and icon themes
+# 35. nm-applet
 
 
 ## < NOTES >
@@ -553,12 +556,9 @@ mode "$mode_gaps_outer" {
 # {08} kitty: using instead of termite; configured to use a dark theme
 #
 # {10} thunar: also uses "leafpad" for opening plaing text files
-# {10} pcmanfm: would need to create file ~/.gtkrc-2.0, and add single line below:
-#   gtk-icon-theme-name = "ZZZZZ"
-#   run  ls -al /usr/share/icons  to see the list of installed themes
-#   -OR-  run sudo pacman -Ss icon-theme to see all available themes (and installed from repo)
-#
-#   >> ALSO NEED TO MANUALLY CREATE THE ~/.config/gtk-3.0/settings.ini file to change icons and themes
+# {10} pcmanfm: use "lxappearance" to set themes
+#   run  _ sudo pacman -Ss gtk | grep theme _  to see all available gtk themes
+#   run  _ sudo pacman -Ss theme | grep icon _  to see all available icon themes
 #   >> THEMES USED CURRENTLY: "Arc" gtk theme, "Paper" icon theme
 # 
 # {11} ranger: may consider installing optional dependency "w3m" to preview html files
