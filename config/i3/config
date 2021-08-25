@@ -547,6 +547,11 @@ mode "$mode_gaps_outer" {
 # 33. fontawesome FONT // for rofi exit menu
 # 34. lxappearance // for setting gtk and icon themes
 # 35. nm-applet
+# 36. nerd-fonts-complete // from the AUR
+# 37. ttc-iosevka FONT
+# 38. ttf-jetbrains-mono FONT
+# 39. ttf-droid FONT
+# 40. font-victor-mono FONT // from the AUR
 
 
 ## < NOTES >
