@@ -81,7 +81,8 @@ endif
     " {needs updating -- unsure which website showed how to configure these settings}
     "
 :set laststatus=2
-:set statusline=%#MatchParen#
+":set statusline=%#MatchParen#
+:set statusline=%#WildMenu#
 ":set statusline+=%*
 :set statusline+=\ %F
 :set statusline+=\ %#Search#
@@ -133,9 +134,10 @@ endif
 ":colorscheme medic_chalk
 ":colorscheme vice
 ":colorscheme isotake
-":colorscheme focuspoint
+:colorscheme focuspoint
 ":colorscheme vim-framer-syntax
-:colorscheme sitruuna
+"NOTE: sitruuna is my preferred option
+":colorscheme sitruuna
 ":colorscheme neodark
 ":colorscheme jellybeans
 ":colorscheme melange
@@ -174,3 +176,10 @@ nnoremap <CR> :noh<CR><CR>
     " https://unix.stackexchange.com/questions/516380/terminalkitty-colors-altering-vim-color-scheme
 let &t_ut=''
 
+"
+"
+" ### TERMINAL MOUSE FIX ###
+    " https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
+if $TERM == 'alacritty'
+  set ttymouse=sgr
+endif
