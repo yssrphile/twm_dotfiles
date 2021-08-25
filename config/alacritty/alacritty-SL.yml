@@ -173,10 +173,10 @@ draw_bold_text_with_bright_colors: true
 # Colors (Tomorrow Night)
 colors:
   # Default colors
-  ### codeschool.dark theme from terminal.sexy ###
+  ### sweetlove theme from terminal.sexy ###
   primary:
-    background: '#232c31'
-    foreground: '#9ea7a6'
+    background: '#1f1f1f'
+    foreground: '#c0b18b'
 
     # Bright and dim foreground colors
     #
@@ -233,25 +233,25 @@ colors:
 
   # Normal colors
   normal:
-    black:   '#232c31'
-    red:     '#2a5491'
-    green:   '#237986'
-    yellow:  '#a03b1e'
-    blue:    '#484d79'
-    magenta: '#c59820'
-    cyan:    '#b02f30'
-    white:   '#9ea7a6'
+    black:   '#4a3637'
+    red:     '#d17b49'
+    green:   '#7b8748'
+    yellow:  '#af865a'
+    blue:    '#535c5c'
+    magenta: '#775759'
+    cyan:    '#6d715e'
+    white:   '#c0b18b'
 
   # Bright colors
   bright:
-    black:   '#3f4944'
-    red:     '#2a5491'
-    green:   '#237986'
-    yellow:  '#a03b1e'
-    blue:    '#484d79'
-    magenta: '#c59820'
-    cyan:    '#b02f30'
-    white:   '#b5d8f6'
+    black:   '#402e2e'
+    red:     '#ac5d2f'
+    green:   '#647035'
+    yellow:  '#8f6840'
+    blue:    '#444b4b'
+    magenta: '#614445'
+    cyan:    '#585c49'
+    white:   '#978965'
 
   # Dim colors
   #
