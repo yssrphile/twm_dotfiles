@@ -1,0 +1,20 @@
+!URxvt*scrollstyle:  plain
+URxvt.scrollBar:	False
+URxvt.font:		xft:JetBrains Mono:pixelsize=14:antialias=true
+URxvt.boldFont:		xft:JetBrains Mono:Bold:pixelsize=14:antialias=true
+!URxvt.transparent:	true
+URxvt.saveLines:	12000
+URxvt.tintColor:	#68615e
+URxvt.depth:		32
+
+
+! #### LINKS ####
+! https://bcacciaaudio.com/2018/11/02/how-to-change-urxvt-terminal-emulator-colors/
+! https://gist.github.com/avsej/1252811
+! http://wiki.afterstep.org/index.php?title=Rxvt-Unicode_Configuration_Tutorial
+!
+!
+! https://terminal.sexy/
+! colorscheme: atelierforest.light
+! colorscheme: gotham
+! colorscheme: yousai
