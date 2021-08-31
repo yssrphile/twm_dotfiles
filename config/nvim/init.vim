@@ -1,15 +1,7 @@
 
-" An example for a vimrc file.
+" CONFIG adapted from a vimrc file.
 "
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2019 Dec 17
-"
-" To use it, copy it to
-"	       for Unix:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
-"	 for MS-Windows:  $VIM\_vimrc
-"	      for Haiku:  ~/config/settings/vim/vimrc
-"	    for OpenVMS:  sys$login:.vimrc
+" Maintainer:	yssrphile (GitHub)
 
 " When started as "evim", evim.vim will already have done these settings, bail
 " out.
@@ -152,5 +144,10 @@ nnoremap <CR> :noh<CR><CR>
 " ### RESTORE CURSOR POSITON ###
 "   " [ custom code for nvim ]
 "   "   : https://www.reddit.com/r/neovim/comments/632wh4/neovim_does_not_save_last_cursor_position/
-autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif 
 
+"
+"
+" ### TERMINAL MOUSE FIX ###
+    " https://stackoverflow.com/questions/65350712/what-is-set-mouse-a-for-in-nvim
+set mouse=a
