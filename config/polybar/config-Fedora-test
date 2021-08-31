@@ -1,0 +1,497 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+
+; [COLOR DEFINITIONS]
+;
+[colors]
+; codeschool.dark  (https://terminal.sexy/)
+CLRBG = #232c31
+CLR00 = #232c31
+CLR01 = #2a5491
+CLR02 = #237986
+CLR03 = #a03b1e
+CLR04 = #484d79
+CLR05 = #c59820
+CLR06 = #b02f30
+CLR07 = #9ea7a6
+
+CLRFG = #9ea7a6
+CLR08 = #3f4944
+CLR09 = #2a5491
+CLR10 = #237986
+CLR11 = #a03b1e
+CLR12 = #484d79
+CLR13 = #c59820
+CLR14 = #b02f30
+CLR15 = #b5d8f6
+
+; alternate colors for the module backgrounds
+; visiblue
+CLR16 = #666699
+CLR17 = #333399
+CLR18 = #6b6b6b
+CLR19 = #00ccff
+CLR20 = #6699ff
+CLR21 = #0099cc
+CLR22 = #0099ff
+CLR23 = #66cccc
+CLR24 = #ccffff
+
+
+;==========================================================
+
+; [BAR DEFINITIONS]
+;
+;[bar/example]
+[bar/bar01]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 27
+;offset-x = 1%
+;offset-y = 1%
+radius = 0.0
+fixed-center = false
+
+background = ${colors.CLRBG}
+foreground = ${colors.CLRFG}
+
+line-size = 3
+line-color = #f00
+
+border-size = 3
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 4
+
+; >> OLD FONT DEFINITIONS
+;;font-0 = Roboto:pixelsize=11;1
+;;font-1 = unifont:fontformat=truetype:size=7:antialias=false;0
+;;font-2 = siji:pixelsize=11;1
+; >> NEW FONT DEFINITIONS
+font-0 = Roboto:pixelsize=11:antialias=true;2.5
+;font-1 = siji:pixelsize=11;1
+;font-2 = Fira Mono:style=Regular:pixelsize=15:antialias=true;3
+;::::  NOTE: siji font has to come before nerd font
+
+#modules-left = i3 bspwm herbstluftwm workspaces
+modules-left = i3
+;modules-center = title
+modules-center = 
+;modules-right = pulseaudio memory cpu battery eth date powermenu
+modules-right = pulseaudio memory cpu date powermenu
+
+tray-position = right
+tray-padding = 3
+tray-detached = false
+tray-background = ${colors.CLR04}
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+[bar/bar02]
+
+
+
+;==========================================================
+
+; [MODULE DEFINITIONS]
+;
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+;format-background = ${colors.CLRBG}
+;format-foreground = ${colors.CLRFG}
+
+pin-workspaces = true
+strip-wsnumbers = true
+index-sort = true
+
+enable-click = true
+enable-scroll = false
+wrapping-scroll = false
+reverse-scroll = false
+
+fuzzy-match = true
+
+ws-icon-default = "  "
+ws-icon-1 = "1;%{T2}ﲵ%{T-}  "
+ws-icon-2 = "2;%{T2}%{T-}  "
+ws-icon-3 = "3;%{T2}爵%{T-}  "
+ws-icon-4 = "4;  "
+ws-icon-5 = "5;  "
+ws-icon-6 = "6;  "
+ws-icon-7 = "7;  "
+ws-icon-8 = "8;  "
+ws-icon-9 = "9;ﲏ  "
+ws-icon-0 = "0;%{T2}ﱭ%{T-}  "
+
+label-mode-padding = 2
+;label-mode-foreground = #000
+label-mode-foreground = ${colors.CLRFG}
+label-mode-background = ${colors.CLR02}
+
+; ** focused = Active workspace on focused monitor
+label-focused = %index%
+;;;label-focused = %icon%
+label-focused-background = ${colors.CLR03}
+label-focused-foreground = ${colors.CLRFG}
+label-focused-underline= ${colors.CLR02}
+label-focused-padding = 2
+
+; ** unfocused = Inactive workspace on any monitor
+label-unfocused = ${self.label-focused}
+label-unfocused-background = ${colors.CLRBG}
+label-unfocused-foreground = ${colors.CLRFG}
+label-unfocused-padding = ${self.label-focused-padding}
+
+; ** visible = Active workspace on unfocused monitor
+label-visible = ${self.label-focused}
+label-visible-background = ${self.label-focused-background}
+label-visible-foreground = ${self.label-focused-foreground}
+;;;label-visible-foreground = ${colors.CLR04}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; ** urgent = Workspace with urgency hint set
+label-urgent = ${self.label-focused}
+label-urgent-background = ${colors.CLR09}
+label-urgent-foreground = ${colors.CLR03}
+label-urgent-padding = ${self.label-focused-padding}
+
+; Separator in between workspaces
+; label-separator = |
+
+
+[module/title]
+type = internal/xwindow
+
+format = <label>
+;format-background = ${colors.CLR04}
+;format-foreground = ${colors.CLRFG}
+format-padding = 2
+
+label = %title%
+label-maxlen = 75
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume><bar-volume>
+label-volume = "VOL (%percentage%%): "
+label-volume-foreground = ${colors.CLR13}
+;label-volume-background = ${colors.CLR18}
+;label-volume-underline = ${colors.CLR06}
+
+label-muted = "  muted  "
+label-muted-foreground = #666
+label-muted-underline = ${colors.CLR06}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${colors.CLR02}
+bar-volume-foreground-1 = ${colors.CLR02}
+bar-volume-foreground-2 = ${colors.CLR02}
+bar-volume-foreground-3 = ${colors.CLR02}
+bar-volume-foreground-4 = ${colors.CLR02}
+bar-volume-foreground-5 = ${colors.CLR05}
+bar-volume-foreground-6 = ${colors.CLR06}
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-foreground = ${self.label-volume-foreground}
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.CLR11}
+; > underlines
+;bar-volume-fill-underline = ${colors.CLR06}
+;bar-volume-empty-underline = ${colors.CLR06}
+;bar-volume-indicator-underline = ${colors.CLR06}
+; > backgrounds
+bar-volume-fill-background = ${self.label-volume-background}
+bar-volume-empty-background = ${self.label-volume-background}
+bar-volume-indicator-background = ${self.label-volume-background}
+
+; ## https://github.com/polybar/polybar/wiki/Module:-pulseaudio
+
+
+[module/memory]
+type = internal/memory
+interval = 2
+;format-prefix = " "
+format-prefix = "RAM: "
+format-prefix-foreground = ${colors.CLR13}
+;format-background = ${colors.CLR19}
+;format-underline = ${colors.CLR08}
+label = %percentage_used%%
+
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+;format-prefix = " "
+format-prefix = "CPU: "
+format-prefix-foreground = ${colors.CLR13}
+;format-underline = ${colors.CLR09}
+label = %percentage:2%%
+;format-background = ${colors.CLR20}
+
+
+[module/battery]
+type = internal/battery
+battery = BAT1
+adapter = ACAD
+;battery = BAT0
+;adapter = ADP1
+full-at = 98
+time-format = %H:%M
+poll-interval = 5
+
+;;;
+;
+; Available tags:
+;   <label-full> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;format-full = <ramp-capacity> <label-full>
+
+; Available tokens:
+;   %percentage% (default)
+;   %time%
+;   %consumption% (shows current charge rate in watts)
+;label-charging = Charging %percentage%%
+label-charging = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+;   %time%
+;   %consumption% (shows current discharge rate in watts)
+;label-discharging = Discharging %percentage%%
+label-discharging = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+;label-full = Fully charged
+label-full = "BATTERY FULL"
+
+;
+;;;
+
+;format-charging = <animation-charging> <label-charging>
+format-charging = <label-charging>
+format-charging-prefix = "BATT: "
+format-charging-prefix-foreground = ${colors.CLR13}
+;format-charging-prefix-background = ${colors.CLR21}
+;format-charging-underline = ${colors.CLR11}
+
+;format-discharging = <animation-discharging> <label-discharging>
+format-discharging = <label-discharging>
+format-discharging-prefix = "BATT: "
+format-discharging-prefix-foreground = ${self.format-charging-prefix-foreground}
+;format-discharging-prefix-background = ${self.format-charging-prefix-background}
+;format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = " "
+format-full-prefix-foreground = ${self.format-charging-prefix-foreground}
+;format-full-prefix-background = ${self.format-charging-prefix-background}
+;format-full-underline = ${self.format-charging-underline}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-foreground = ${colors.CLR13}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-foreground = ${colors.CLR13}
+animation-charging-framerate = 750
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-foreground = ${colors.CLR13}
+animation-discharging-framerate = 2000
+
+
+;>>[module/wlan]
+;>>type = internal/network
+;>>interface = net1
+;>>interval = 3.0
+;>>
+;>>format-connected = <ramp-signal> <label-connected>
+;>>;format-connected-underline = ${colors.CLR13}
+;>>label-connected = %essid%
+;>>
+;>>format-disconnected =
+;>>;format-disconnected = <label-disconnected>
+;>>;;format-disconnected-underline = ${self.format-connected-underline}
+;>>;label-disconnected = %ifname% disconnected
+;>>;label-disconnected-foreground = ${colors.CLR11}
+;>>
+;>>ramp-signal-0 = 
+;>>ramp-signal-1 = 
+;>>ramp-signal-2 = 
+;>>ramp-signal-3 = 
+;>>ramp-signal-4 = 
+;>>ramp-signal-foreground = ${colors.CLR11}
+
+
+[module/eth]
+type = internal/network
+interface = ens33
+interval = 3.0
+
+;format-connected-underline = ${colors.CLR10}
+;format-connected-prefix = " "
+format-connected-prefix = "IP: "
+format-connected-prefix-foreground = ${colors.CLR13}
+;format-connected-prefix-background = ${colors.CLR22}
+label-connected = %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.CLR11}
+;;label-disconnected-background = ${self.format-connected-prefix-background}
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = " %a   %d %b %Y "
+date-alt = %D 
+
+time = %H:%M
+time-alt = "  %r %Z "
+
+format-prefix = 
+format-prefix-foreground = ${colors.CLR13}
+;format-underline = ${colors.CLR12}
+format-foreground = ${colors.CLR10}
+;format-background = ${colors.CLR23}
+
+label = %date% %time%
+
+; > SOURCE: https://www.howtogeek.com/410442/how-to-display-the-date-and-time-in-the-linux-terminal-and-use-it-in-bash-scripts/
+
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+;label-open = 
+label-open = " [ POWER ]  "
+label-open-foreground = ${colors.CLR03}
+label-close =  cancel
+label-close-foreground = ${colors.CLR13}
+label-separator = |
+label-separator-foreground = ${colors.CLR11}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = systemctl reboot
+
+menu-2-0 = power off
+menu-2-0-exec = systemctl poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+
+[module/right1]
+type = custom/text
+content-background = ${colors.CLRFG}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right2]
+type = custom/text
+content-background = ${colors.}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right3]
+type = custom/text
+content-background = ${colors.}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right4]
+type = custom/text
+content-background = ${colors.}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right5]
+type = custom/text
+content-background = ${colors.}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right6]
+type = custom/text
+content-background = ${colors.}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+[module/right7]
+type = custom/text
+content-background = ${colors.bground}
+content-foreground = ${colors.CLRFG}
+content = "%{T3}%{T-}"
+
+
+
+;==========================================================
+
+; [MISCELLANEOUS DEFINITIONS]
+;
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini
