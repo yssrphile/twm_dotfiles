@@ -97,9 +97,10 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 ## < OPEN A TERMINAL >
 #bindsym $mod+Return exec i3-sensible-terminal
 ###bindsym $mod+Return exec termite
-set $def_term "alacritty"
+set $def_term alacritty
+set $bkp_term kitty
 bindsym $mod+Return exec $def_term
-bindsym $mod+backslash exec kitty
+bindsym $mod+backslash exec $bkp_term
 
 
 ## < OPEN FIREFOX >
@@ -110,16 +111,19 @@ bindsym $mod+Shift+apostrophe exec firefox
 ## < OPEN FILE MANAGER >
 #bindsym $mod+n exec thunar
 bindsym $mod+n exec pcmanfm
-#bindsym $mod+m exec echo -e "\a"; exec kitty -e "ranger"
-#bindsym $mod+m exec kitty -e "ranger", [urgent=oldest] move container to workspace number $ws7
-#bindsym $mod+m workspace number $ws7; exec kitty -e "ranger"
-bindsym $mod+m exec kitty -e "ranger"
+#bindsym $mod+m exec echo -e "\a"; exec $bkp_term -e "ranger"
+#bindsym $mod+m exec $bkp_term -e "ranger", [urgent=oldest] move container to workspace number $ws7
+#bindsym $mod+m workspace number $ws7; exec $bkp_term -e "ranger"
+bindsym $mod+m exec $def_term -e "ranger"
 
 
 ## < VOLUME CONTROLS >
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volumeup.sh
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volumedown.sh
-bindsym XF86AudioMute exec --no-startup-id ~/.config/i3/scripts/mutevolume.sh
+#bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volumeup-FD.sh
+bindsym $mod+F3 exec --no-startup-id ~/.config/i3/scripts/volumeup-FD.sh
+#bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volumedown-FD.sh
+bindsym $mod+F2 exec --no-startup-id ~/.config/i3/scripts/volumedown-FD.sh
+#bindsym XF86AudioMute exec --no-startup-id ~/.config/i3/scripts/mutevolume-FD.sh
+bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/mutevolume-FD.sh
 
 
 ## < BACKLIGHT CONTROLS >
@@ -128,22 +132,24 @@ bindsym XF86MonBrightnessDown exec xbacklight -10
 
 
 ## < OPEN GTOP >
-#bindsym $mod+g exec alacritty -e "gtop"
-#bindsym $mod+y exec kitty -e "gtop"
-bindsym $mod+y exec kitty -e "glances"
+#bindsym $mod+g exec $def_term -e "gtop"
+#bindsym $mod+y exec $bkp_term -e "gtop"
+bindsym $mod+y exec $bkp_term -e "glances"
 
 
 ## < GRAB SCREENSHOT >
-bindsym Print exec "scrot ~/Pictures/Screenshots/%Y-%m-%d-%T-screenshot.png"
+#bindsym Print exec "scrot ~/Pictures/Screenshots/%Y-%m-%d-%T-screenshot.png"
+bindsym Print exec --no-startup-id gnome-screenshot
 
 
 ## < OPEN PROGRAM LAUNCHER >
 # [ Rofi ]
-bindsym $mod+z exec rofi -show "drun" -display-drun "App Launcher" -theme sweetlove -show-icons -sidebar-mode
+bindsym $mod+z exec rofi -modi "drun" -show "drun" -display-drun "App Launcher:" -line-padding 4 -theme codeschool-light -show-icons
 
-bindsym F12 exec rofi -modi "drun" -show "drun" -display-drun "App Launcher :" -line-padding 4 -theme sweetlove -show-icons
+bindsym F12 exec rofi -show "drun" -display-drun "App Launcher:" -theme codeschool-light -show-icons -sidebar-mode
 
-bindsym F11 exec rofi -show "window" -theme sweetlove -show-icons
+#bindsym F11 exec rofi -show "window" -theme codeschool-light -show-icons
+bindsym F11 exec rofi -show "window" -display-window "Window:" -theme codeschool-light -show-icons
 
 # [ EXPERIMENTAL ]
 # [1]
@@ -276,7 +282,7 @@ for_window [class="Nitrogen"] border pixel 1
 
 #: }}}
 
-##### :WORKSPACE DETERMINATIONS  {{{                                                    #####
+##### :WORKSPACE DETERMINATI ONS  {{{                                                    #####
 #############################################################################################
 
 ## < WORKSPACE NAMES >
@@ -337,12 +343,14 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # assign [class="Thunar"] $ws7
 ###assign [class="Pcmanfm"] $ws7
 ###assign [class="Alacritty"] $ws7
-assign [class="kitty"] $ws4
+##assign [class="kitty"] $ws4
+assign [class=$bkp_term] $ws5
 
 
 ## < SWITCH TO WORKSPACE WITH URGENT WINDOW AUTOMATICALLY >
 for_window [urgent=latest] focus
 ###for_window [class="kitty"] focus
+###for_window [class=$bkp_term] focus
 
 #: }}}
 
@@ -403,14 +411,16 @@ client.background	#ffffff
 
 ## < LOGOUT, SHUTDOWN, RESTART, AND LOCKING >
 ###bindsym $mod+Shift+e mode "$mode_system"
-bindsym $mod+Shift+e exec --no-startup-id ~/.config/i3/scripts/shutdown_menu -p rofi -c
+#bindsym $mod+Shift+e exec --no-startup-id ~/.config/i3/scripts/shutdown_menu -p rofi -c
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/i3/scripts/shutdown_menu-FD -p rofi -c
 
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 
 #set $user_session loginctl session-status | awk 'NR==1{print $1}'
 set $user_session `loginctl session-status | head -n 1 | awk '{print $1}'`
 
-set $locker_cmd i3lock -f -b -B sigma --indicator --ring-color=7b8748 --line-color=1f1f1f --ringwrong-color=d17b49 --insidewrong-color=d17b4980 --ringver-color=535c5c --inside-color=6d715e80 --insidever-color=444b4b80 --keyhl-color=647035 bshl-color=402e2e --verif-color=c0b18b --wrong-color=c0b18b && sleep 1
+###set $locker_cmd i3lock -f -b -B sigma --indicator --ring-color=7b8748 --line-color=1f1f1f --ringwrong-color=d17b49 --insidewrong-color=d17b4980 --ringver-color=535c5c --inside-color=6d715e80 --insidever-color=444b4b80 --keyhl-color=647035 bshl-color=402e2e --verif-color=c0b18b --wrong-color=c0b18b && sleep 1
+set $locker_cmd exec xautolock -locknow 
 
 mode "$mode_system" {
     #bindsym l exec --no-startup-id loginctl lock-session, mode "default"
@@ -437,6 +447,14 @@ mode "$mode_system" {
 ###exec --no-startup-id xset s 480 dpms 600 600 600
 ###bindsym $mod+l exec i3lock -i /usr/share/endeavouros/backgrounds/eos_wallpapers_community/blinky_1.png -p default|win -t
 #bindsym $mod+l exec --no-startup-id $locker_cmd
+exec_always --no-startup-id xautolock \
+  -time 5 \
+  -locker "~/.config/i3/scripts/blur-lock2.sh" \
+  -killtime 10 \
+  -killer "systemctl suspend" \
+  -notify 120 \
+  -notifier "notify-send -u critical -t 15000 -- 'LOCKING screen in 2 minutes'" \
+  -detectsleep 
 
 #: }}}
 
@@ -552,6 +570,7 @@ mode "$mode_gaps_outer" {
 # 38. ttf-jetbrains-mono FONT
 # 39. ttf-droid FONT
 # 40. font-victor-mono FONT // from the AUR
+# 41. ufw
 
 
 ## < NOTES >
