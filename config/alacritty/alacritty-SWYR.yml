@@ -174,10 +174,10 @@ draw_bold_text_with_bright_colors: true
 # Colors (Tomorrow Night)
 colors:
   # Default colors
-  ### gotham theme from terminal.sexy ###
+  ### swayr theme from terminal.sexy ###
   primary:
-    background: '#0a0f14'
-    foreground: '#98d1ce'
+    background: '#1c1709'
+    foreground: '#c2b9a1'
 
     # Bright and dim foreground colors
     #
@@ -234,25 +234,25 @@ colors:
 
   # Normal colors
   normal:
-    black:   '#0a0f14'
-    red:     '#c33027'
-    green:   '#26a98b'
-    yellow:  '#edb54b'
-    blue:    '#195465'
-    magenta: '#4e5165'
-    cyan:    '#33859d'
-    white:   '#98d1ce'
+    black:   '#1c1709'
+    red:     '#8e4317'
+    green:   '#787200'
+    yellow:  '#945c00'
+    blue:    '#315094'
+    magenta: '#5c2e40'
+    cyan:    '#00617d'
+    white:   '#c2b9a1'
 
   # Bright colors
   bright:
-    black:   '#10151b'
-    red:     '#d26939'
-    green:   '#081f2d'
-    yellow:  '#245361'
-    blue:    '#093748'
-    magenta: '#888ba5'
-    cyan:    '#599caa'
-    white:   '#d3ebe9'
+    black:   '#4f4939'
+    red:     '#f07935'
+    green:   '#d9d138'
+    yellow:  '#ffab26'
+    blue:    '#8aa9ed'
+    magenta: '#ff8cb8'
+    cyan:    '#43bfe0'
+    white:   '#f2e8c9'
 
   # Dim colors
   #
