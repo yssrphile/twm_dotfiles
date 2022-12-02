@@ -110,6 +110,7 @@ alias ls='exa'
 alias cat='bat'
 alias find='fd'
 #alias vim='nvim'
+#alias yayc="yay;paccache -rk 2;paccache -ruk0;sudo pacdiff"
 
 
 path+=('/home/les/.local/bin')
