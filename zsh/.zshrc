@@ -10,7 +10,21 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="nanotech"
-ZSH_THEME="terminalparty"
+#ZSH_THEME="terminalparty"
+#ZSH_THEME="trapd00r"
+#ZSH_THEME="simonoff"
+#ZSH_THEME="mortalscumbag"
+#ZSH_THEME="maran"
+#ZSH_THEME="kardan"
+#ZSH_THEME="jtriley"
+#ZSH_THEME="gallois"
+#ZSH_THEME="flazz"
+#ZSH_THEME="eastwood"
+#ZSH_THEME="dpoggi"
+#ZSH_THEME="funky"
+#ZSH_THEME="juanghurtado"
+ZSH_THEME="kennethreitz"
+#ZSH_THEME="nicoulaj"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -110,10 +124,10 @@ alias ls='exa'
 alias cat='bat'
 alias find='fd'
 #alias vim='nvim'
-#alias yayc="yay;paccache -rk 2;paccache -ruk0;sudo pacdiff"
+alias yayc="yay;paccache -rk 2;paccache -ruk0;sudo pacdiff"
 
 
 path+=('/home/les/.local/bin')
 
 
-neofetch
+#neofetch
