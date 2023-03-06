@@ -1,0 +1,305 @@
+# vim:foldmethod=marker
+# zR to open all folds at once (all levels)
+# zM to close all folds at once (all levels)
+
+#:SECTION 01 -- CREDITS {{{
+#############################################################################################
+# This is a remake of my GitHub i3 config file
+# hopefully scaled down to only necessary stuff
+# 05 Mar 2023
+#: }}}
+
+
+#:SECTION 02 -- REQUIREMENTS {{{
+#############################################################################################
+# 01. Roboto Mono -- default font
+# 	To get a list of installed fonts, use_  fc-list : family style  _in a terminal
+# 	To get the current mapping of the keyboard keys, run_  xmodmap -pke  _in a terminal
+# 02. **NetworkManager -- to manage networks
+# 03. ^^Blueberry -- to manager Bluetooth devices
+# 04. Picom -- for transparency and compositing effects
+# 05. Nitrogen -- for wallpapers
+# 06. Polybar -- for managing "bar" functions
+# 	> "launch.sh" file needs to be in the ~/.config/polybar directory and made executable
+# 07. +Kitty -- terminal
+# 08. **Firefox -- browser
+# 09. PCManFM -- graphical file manager
+# 10. Ranger -- terminal file manager
+# 11. <volume scripts need to be in the ~/.config/i3/scripts directory>
+# 12. Rofi -- for launching apps/programs
+# 13. Dunst -- for popup notifications
+
+#: }}}
+
+
+#:SECTION 03 -- BASICS  {{{
+#############################################################################################
+# set MODKEY
+set $mod Mod4
+# set FLOAT_MODKEY -- to move floating windows
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+###floating_modifier Mod1
+# set FONT for window titles
+font pango: roboto mono 14
+
+# start NetworkManager
+exec --no-startup-id nm-applet
+# start Blueberry
+exec --no-startup-id blueberry-tray
+# start Picom
+exec_always picom -f
+# start Nitrogen
+exec --no-startup-id nitrogen --restore; sleep 1
+# start Polybar
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+# workspace names
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# set terminal colors -- from https://terminal.sexy/ -- theme: baskerville-ivorylight
+# > should match the default terminal theme
+set $tclrbg #fef9ec
+set $tclr00 #c5c1b4
+set $tclr01 #e75c58
+set $tclr02 #00a250
+set $tclr03 #a08a00
+set $tclr04 #208ffb
+set $tclr05 #d160c4
+set $tclr06 #00a4c1
+set $tclr07 #3e424d
+set $tclrfg #6d727e
+set $tclr08 #a1a6b2
+set $tclr09 #b22b31
+set $tclr10 #007427
+set $tclr11 #715f00
+set $tclr12 #0065ca
+set $tclr13 #a03196
+set $tclr14 #007693
+set $tclr15 #282c36
+
+# window title bar borders
+# > all uncommented below to REMOVE window title bars
+default_border pixel 1
+default_floating_border pixel 1
+for_window [class="^.*"] border pixel 1
+for_window [class="Nitrogen"] border pixel 1
+# window color/decoration
+# class			border  backgrd textclr indictr chldbdr
+client.focused		$tclr01 $tclr01 $tclr08 $tclr09 $tclrfg
+client.focused_inactive	$tclrbg $tclrbg $tclr01 #484e50 #7e705a
+client.unfocused	$tclrbg $tclrbg $tclr12 #292d2e #222222
+client.urgent		#2f343a #900000 $tclr29 #900000 #900000
+client.placeholder	#000000 #0c0c0c #ffffff #000000 #0c0c0c
+client.background	#ffffff
+# > figure out color transparency -- https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
+
+# open specific apps in floating mode
+for_window [title="alsamixer"] floating enable border pixel 1
+for_window [title="File Transfer*"] floating enable
+for_window [title="i3_help"] floating enable sticky enable border normal
+for_window [class="Nitrogen"] floating enable sticky enable border normal
+for_window [class="octopi"] floating enable
+for_window [class="Pamac-manager"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Simple-scan"] floating enable border normal
+for_window [class="(?i)System-config-printer.py"] floating enable border normal
+for_window [class="Timeset-gui"] floating enable border normal
+
+# automatically switch workspace focus back and forth
+workspace_auto_back_and_forth yes
+# automatically switch to workspace with urget window
+for_window [urgent=latest] focus
+###for_window [class="kitty"] focus
+###for_window [class=$bkp_term] focus
+# assign an app to open an a specific workspace
+###assign [class="kitty"] $ws4
+###assign [class=$bkp_term] $ws5
+
+#: }}}
+
+
+#:SECTION 04 -- GENERAL KEYBINDINGS {{{
+#############################################################################################
+# kill focused window
+bindsym $mod+Shift+q kill
+# restart i3 (inplace)
+bindsym $mod+Shift+r restart
+# open terminal
+set $def_term kitty
+###set $bkp_term alacritty
+bindsym $mod+Return exec $def_term
+###bindsym $mod+backslash exec $bkp_term
+# open browser
+set $def_browser firefox
+bindsym $mod+Shift+Return exec $def_browser -private-window
+bindsym $mod+Shift+apostrophe exec $def_browser
+# open file manager
+set $def_file_mgr pcmanfm
+bindsym $mod+n exec $def_file_mgr ## graphical
+bindsym $mod+m exec $def_term -e "ranger"  ## terminal
+# volume controls
+bindsym $mod+F3 exec --no-startup-id ~/.config/i3/scripts/volumeup-FD.sh ## increase
+bindsym $mod+F2 exec --no-startup-id ~/.config/i3/scripts/volumedown-FD.sh ## decrease
+bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/mutevolume-FD.sh ## mute
+# open program launcher
+bindsym $mod+z exec rofi -modi "drun" -show "drun" -display-drun "App Launcher:" -line-padding 4 -show-icons ## main
+#bindsym $mod+d exec dmenu_run ## backup
+
+#: }}}
+
+
+#:SECTION 05 -- WINDOW KEYBINDINGS {{{
+#############################################################################################
+# change focus -- SAME WORKSPACE
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+# move window -- SAME WORKSPACE
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+# new window orientation split
+bindsym $mod+h split h;exec dunstify -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
+bindsym $mod+v split v;exec dunstify -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
+bindsym $mod+t split toggle ## toggle between vert & horiz
+
+# fullscreen mode toggle
+bindsym $mod+f fullscreen toggle
+# change container layout
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+# parent or child focusing
+bindsym $mod+a focus parent
+bindsym $mod+d focus child
+###bindsym $mod+o focus parent ## "outer"
+###bindsym $mod+i focus child ## "inner"
+
+# resize windows
+bindsym $mod+r mode "resize"
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+        #
+        # Resize with the arrow keys
+        bindsym Left resize shrink width 2 px or 2 ppt
+        bindsym Down resize grow height 2 px or 2 ppt
+        bindsym Up resize shrink height 2 px or 2 ppt
+        bindsym Right resize grow width 2 px or 2 ppt
+          # Pressing left will shrink the window’s width.
+          # Pressing right will grow the window’s width.
+          # Pressing up will shrink the window’s height.
+          # Pressing down will grow the window’s height.
+
+        bindsym Shift+Left resize shrink width 40 px or 40 ppt
+        bindsym Shift+Down resize grow height 20 px or 20 ppt
+        bindsym Shift+Up resize shrink height 40 px or 40 ppt
+        bindsym Shift+Right resize grow width 20 px or 20 ppt
+          # Pressing left will shrink the window’s width.
+          # Pressing right will grow the window’s width.
+          # Pressing up will shrink the window’s height.
+          # Pressing down will grow the window’s height.
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+# floating mode commands
+bindsym $mod+Shift+space floating toggle ## toggle a window into/out of focus mode
+bindsym $mod+space focus mode_toggle ## toggle focus between tiling and floating windows
+
+#: }}}
+
+
+#:SECTION 06 -- WORKSPACE KEYBINDINGS {{{
+#############################################################################################
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+# cycle through workspaces
+bindsym $mod+bracketleft workspace prev
+bindsym $mod+bracketright workspace next
+# move focused window (or container) to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+#: }}}
+
+
+#:SECTION 07 -- POWER MANAGEMENT KEYBINDINGS {{{
+#############################################################################################
+bindsym $mod+Shift+e mode "$mode_system"
+
+mode "$mode_system" {
+    bindsym l exec --no-startup-id loginctl lock-session, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
+    bindsym e exec --no-startup-id loginctl terminate-session $user_session, mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+#: }}}
+
+
+#:SECTION 08 -- i3 GAPS KEYBINDINGS {{{
+#############################################################################################
+# set gap sizes
+gaps inner 5
+gaps outer 2
+# smart gaps -- gaps used only if more than one container is on the workspace
+smart_gaps on
+# smart borders -- will not draw containter borders if more than one is on the workspace
+smart_borders on
+
+#: }}}
+
+
+#:SECTION 09 --  {{{
+#############################################################################################
+
+#: }}}
+
+
+#:SECTION 10 --  {{{
+#############################################################################################
+
+#: }}}
+
+
+# zR to open all folds at once (all levels)
+# zM to close all folds at once (all levels)
