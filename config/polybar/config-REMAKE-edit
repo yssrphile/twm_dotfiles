@@ -67,10 +67,10 @@ module-margin-right = 2
 ;separator = " "
 
 ;--- FONTS
-font-0 = JetBrains Mono:size=14
-font-1 = Roboto Mono:size=14
-font-2 = Hack:size=14
-font-3 = Font_Awesome:size 14
+font-0 = JetBrains Mono:size=12
+font-1 = Roboto Mono:size=12
+font-2 = Hack:size=12
+font-3 = Font_Awesome:size 12
 
 ;--- MODULES and TRAY
 modules-left = i3
