@@ -41,7 +41,7 @@ set $mod Mod4
 floating_modifier $mod
 ###floating_modifier Mod1
 # set FONT for window titles
-font pango: roboto mono 14
+font pango: roboto mono 12
 
 # start NetworkManager
 exec --no-startup-id nm-applet
@@ -52,7 +52,31 @@ exec_always picom -b
 # start Nitrogen
 exec --no-startup-id nitrogen --restore; sleep 1
 # start Polybar
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+bar {
+	status_command i3status
+	#mode hide
+	position top
+	output primary
+	#tray_output none
+	font pango:JetBrains Mono 15
+	separator_symbol " | "
+	workspace_min_width 75
+
+    colors { 
+	background $tclrbg
+	statusline $tclrfg
+	separator $tclr05
+
+	#			border		background	text
+	focused_workspace	$tclr02		$tclr03		$tclrbg
+	active_workspace	$tclr06		$tclr03		$tclrbg
+	inactive_workspace	$tclrbg		$tclrbg		$tclrfg
+	urgent_workspace	$tclrbg		$tclr01		$tclr00
+	binding_mode		$tclr10		$tclr02		$tclrbg
+    }
+
+}
 
 # workspace names
 set $ws1 "1"
@@ -173,8 +197,8 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 # new window orientation split
-bindsym $mod+h split h;exec dunstify -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
-bindsym $mod+v split v;exec dunstify -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
+bindsym $mod+h split h;exec notify-send -h transparency 20 -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
+bindsym $mod+v split v;exec notify-send -h transparency 20 -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
 # toggle between vert & horiz
 bindsym $mod+t split toggle
 
