@@ -1,0 +1,204 @@
+/**************************************************************
+ * ROFI Color theme
+ **************************************************************/
+
+* {
+    /**** navy-and-ivory -- terminal.sexy colors ****/
+    
+    /* special */
+    colorfg: #e8dfd6; // Ivory
+    colorbg: #021b21; // Navy
+    colorcs: #e8dfd6; // Ivory
+
+    /* black */
+    color00: #032c36; // Dark navy
+    color08: #065f73; // Dark teal
+
+    /* red */
+    color01: #c2454e; // Red
+    color09: #ef5847; // Bright red
+
+    /* green */
+    color02: #7cbf9e; // Light green
+    color10: #a2d9b1; // Bright green
+
+    /* yellow */
+    color03: #8a7a63; // Brownish yellow
+    color11: #beb090; // Light yellow
+
+    /* blue */
+    color04: #2e3340; // Dark blue
+    color12: #61778d; // Light blue
+
+    /* magenta */
+    color05: #ff5879; // Pink
+    color13: #ff99a1; // Light pink
+
+    /* cyan */
+    color06: #44b5b1; // Cyan
+    color14: #9ed9d8; // Light cyan
+
+    /* white */
+    color07: #f2f1b9; // Off-white
+    color15: #f6f6c9; // Very light ivory
+
+    /* Navy-and-Ivory Theme */
+    transparent-background:      rgba ( 0, 0, 0, 0 % );
+    foreground:                  @colorfg; // Ivory
+    background:                  rgba ( 0, 0, 0, 90 % );
+
+    normal-foreground:           @foreground;
+    normal-background:           @transparent-background;
+    active-foreground:           @color10; // Light green
+    active-background:           @color04; // Dark blue for active
+    urgent-foreground:           @color09; // Bright red
+    urgent-background:           @color00; // Dark navy for urgent
+
+    selected-normal-foreground:  @color10; // Light green for selected text
+    selected-normal-background:  @color12; // Light blue for selected background
+    selected-active-foreground:  @colorfg; // Ivory
+    selected-active-background:   @color12; // Light blue for active selection
+    selected-urgent-foreground:  @color09; // Bright red
+    selected-urgent-background:   @color00; // Dark navy for urgent selection
+
+    alternate-normal-foreground: @foreground;
+    alternate-normal-background: @transparent-background;
+    alternate-active-foreground: @active-foreground;
+    alternate-active-background: @transparent-background;
+    alternate-urgent-foreground: @urgent-foreground;
+    alternate-urgent-background: @transparent-background;
+
+    separatorcolor:              @color12; // Light blue
+
+    /* Main element styles */
+    border-color:                @color12; // Light blue
+    spacing:                     2;
+    background-color:            @transparent-background;
+    font:                        "Roboto Mono 9";
+}
+
+window {
+    background-color: @background; // Navy
+    border:           1;
+    padding:          20;
+}
+
+mainbox {
+    border:  0;
+    padding: 0;
+}
+
+message {
+    border:       1px dash 0px 0px ;
+    border-color: @separatorcolor; // Light blue
+    padding:      1px ;
+}
+
+textbox {
+    text-color: @foreground; // Ivory
+}
+
+listview {
+    fixed-height: 0;
+    border:       1px dash 0px 0px ;
+    border-color: @separatorcolor; // Light blue
+    spacing:      2px ;
+    scrollbar:    false;
+    padding:      8px 0px 0px 0px;
+}
+
+element {
+    border:  0;
+    padding: 1px 0px 1px 1px;
+}
+
+element normal.normal {
+    background-color: @normal-background; // Transparent
+    text-color:       @normal-foreground; // Ivory
+}
+
+element normal.urgent {
+    background-color: @urgent-background; // Dark navy
+    text-color:       @urgent-foreground; // Bright red
+}
+
+element normal.active {
+    background-color: @active-background; // Dark blue
+    text-color:       @active-foreground; // Light green
+}
+
+element selected.normal {
+    background-color: @selected-normal-background; // Light blue
+    text-color:       @selected-normal-foreground; // Light green
+}
+
+element selected.urgent {
+    background-color: @selected-urgent-background; // Dark navy
+    text-color:       @selected-urgent-foreground; // Bright red
+}
+
+element selected.active {
+    background-color: @selected-active-background; // Light blue
+    text-color:       @selected-active-foreground; // Ivory
+}
+
+element alternate.normal {
+    background-color: @alternate-normal-background; // Transparent
+    text-color:       @alternate-normal-foreground; // Ivory
+}
+
+element alternate.urgent {
+    background-color: @alternate-urgent-background; // Transparent
+    text-color:       @alternate-urgent-foreground; // Bright red
+}
+
+element alternate.active {
+    background-color: @alternate-active-background; // Transparent
+    text-color:       @alternate-active-foreground; // Light green
+}
+
+scrollbar {
+    width:        4px ;
+    border:       0;
+    handle-width: 8px ;
+    padding:      0;
+}
+
+mode-switcher {
+    border:       2px dash 0px 0px ;
+    border-color: @separatorcolor; // Light blue
+}
+
+button selected {
+    background-color: @selected-normal-background; // Light blue
+    text-color:       @selected-normal-foreground; // Light green
+}
+
+inputbar {
+    spacing:    0;
+    text-color: @normal-foreground; // Ivory
+    children:   [prompt, textbox-prompt-colon, entry, case-indicator];
+    padding:    1px ;
+}
+
+case-indicator {
+    spacing:    0;
+    text-color: @normal-foreground; // Ivory
+}
+
+entry {
+    spacing:    0;
+    text-color: @normal-foreground; // Ivory
+}
+
+prompt {
+    spacing:    0;
+    text-color: @normal-foreground; // Ivory
+}
+
+textbox-prompt-colon {
+  expand:     false;
+  str:        " |";
+  text-color: @text-alt;
+}
+

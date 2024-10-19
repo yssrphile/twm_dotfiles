@@ -1,0 +1,13 @@
+configuration {
+}
+
+run {
+    run-command: "~/.config/rofi/scripts/dynamic-menu.sh";
+}
+
+drun {
+    run-command: "~/.config/rofi/scripts/icon-menu.sh";
+}
+
+;@theme: "~/.config/rofi/navy-and-ivory.rasi";
+

@@ -1,0 +1,205 @@
+# vim:foldmethod=marker
+
+#:SECTION 01 -- CREDITS {{{
+#############################################################################################
+# This is a remake of my GitHub i3 config file
+# hopefully scaled down to only necessary stuff
+# 05 Mar 2023
+#: }}}
+
+#:SECTION 02 -- REQUIREMENTS {{{
+#############################################################################################
+# 01. Roboto Mono -- default font
+# 02. NetworkManager-applet -- to manage networks from the system tray
+# 03. Blueberry -- to manager Bluetooth devices
+# 04. Picom -- for transparency and compositing effects
+# 05. Nitrogen -- for wallpapers
+# 06. Polybar -- for managing "bar" functions
+# 07. Kitty -- terminal
+# 08. Firefox -- browser
+# 09. PCManFM -- graphical file manager
+# 10. Ranger -- terminal file manager
+# 11. Volume scripts in ~/.config/i3/scripts directory
+# 12. Rofi -- for launching apps/programs
+# 13. Dunst -- for popup notifications
+#: }}}
+
+#:SECTION 03 -- BASICS {{{
+#############################################################################################
+set $mod Mod4
+floating_modifier $mod
+font pango: Roboto Mono 14
+
+exec --no-startup-id nm-applet
+exec_always picom -b
+exec --no-startup-id nitrogen --restore; sleep 1
+###exec_always --no-startup-id $HOME/.config/polybar/launch.sh --material
+##exec_always --no-startup-id $HOME/.config/polybar/launch.sh --docky
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh --colorblocks
+
+# Set terminal colors -- theme: navy-and-ivory
+set $tclrbg #021b21
+set $tclrfg #e8dfd6
+set $tclr00 #e8dfd6
+set $tclr01 #c2454e
+set $tclr02 #7cbf9e
+set $tclr03 #8a7a63
+set $tclr04 #2e3340
+set $tclr05 #ff5879
+set $tclr06 #44b5b1
+set $tclr07 #f2f1b9
+set $tclr08 #032c36
+set $tclr09 #ef5847
+set $tclr10 #a2d9b1
+set $tclr11 #beb090
+set $tclr12 #61778d
+set $tclr13 #ff99a1
+set $tclr14 #9ed9d8
+set $tclr15 #f6f6c9
+
+# Window title bar borders
+default_border pixel 1
+default_floating_border pixel 1
+for_window [class="^.*"] border pixel 5
+for_window [class="Nitrogen"] border pixel 1
+
+# Window color/decoration
+client.focused $tclr01 $tclr01 $tclr08 $tclr09 $tclrbg
+client.focused_inactive $tclrbg $tclrbg $tclr01
+client.unfocused $tclrbg $tclrbg $tclr12
+client.urgent #900000 $tclr29 #900000
+client.placeholder #000000 #0c0c0c #ffffff
+client.background #ffffff
+
+# Automatically switch workspace focus back and forth
+workspace_auto_back_and_forth yes
+for_window [urgent=latest] focus
+
+#: }}}
+
+#:SECTION 04 -- GENERAL KEYBINDINGS {{{
+#############################################################################################
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+r restart
+set $def_term kitty
+bindsym $mod+Return exec $def_term
+set $def_browser firefox
+bindsym $mod+Shift+Return exec $def_browser -private-window
+set $def_file_mgr pcmanfm
+bindsym $mod+n exec $def_file_mgr
+bindsym $mod+m exec $def_term -e "ranger"
+bindsym $mod+F3 exec --no-startup-id ~/.config/i3/scripts/volumeup-FD.sh
+bindsym $mod+F2 exec --no-startup-id ~/.config/i3/scripts/volumedown-FD.sh
+bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/mutevolume-FD.sh
+#bindsym $mod+z exec rofi -modi "drun" -show "drun" -display-drun "App Launcher:" -line-padding 4 -show-icons
+# COMMENTED OUT THE ROFI KEYBIND, SO ONLY THE POLYBAR ROFI THEME IS AVAILABLE #
+bindsym $mod+z exec --no-startup-id ~/.config/polybar/colorblocks/scripts/launcher.sh
+#: }}}
+
+#:SECTION 05 -- WINDOW KEYBINDINGS {{{
+#############################################################################################
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+bindsym $mod+h split h;exec notify-send -h transparency 20 -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile horizontally'
+bindsym $mod+v split v;exec notify-send -h transparency 20 -h string:font:'Roboto Mono 12' -h string:bgcolor:$tclrbg -h string:fgcolor:$tclrfg -h string:frcolor:$tclr04 'tile vertically'
+bindsym $mod+t split toggle
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+a focus parent
+bindsym $mod+d focus child
+bindsym $mod+r mode "resize"
+mode "resize" {
+    bindsym Left resize shrink width 2 px or 2 ppt
+    bindsym Down resize grow height 2 px or 2 ppt
+    bindsym Up resize shrink height 2 px or 2 ppt
+    bindsym Right resize grow width 2 px or 2 ppt
+    bindsym Shift+Left resize shrink width 40 px or 40 ppt
+    bindsym Shift+Down resize grow height 20 px or 20 ppt
+    bindsym Shift+Up resize shrink height 40 px or 40 ppt
+    bindsym Shift+Right resize grow width 20 px or 20 ppt
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+#: }}}
+
+#:SECTION 06 -- WORKSPACE KEYBINDINGS {{{
+#############################################################################################
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+bindsym $mod+bracketleft workspace prev
+bindsym $mod+bracketright workspace next
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+#: }}}
+
+#:SECTION 07 -- POWER MANAGEMENT KEYBINDINGS {{{
+#############################################################################################
+set $mode_system Exit option: (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
+set $user_session `loginctl session-status | head -n 1 | awk '{print $1}'`
+bindsym $mod+Shift+e mode "$mode_system"
+mode "$mode_system" {
+    bindsym l exec --no-startup-id ~/.config/i3/scripts/lock_screen.sh, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym u exec --no-startup-id gdmflexiserver, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
+    
+    bindsym Escape mode "default"
+}
+#: }}}
+
+#:SECTION 08 -- APPLICATIONS {{{
+#############################################################################################
+bindsym $mod+Shift+n exec --no-startup-id $def_browser -private-window
+######bindsym $mod+Shift+e exec --no-startup-id $def_file_mgr
+bindsym $mod+Shift+m exec --no-startup-id $def_term -e "ranger"
+bindsym $mod+Shift+t exec --no-startup-id $def_term -e "htop"
+#: }}}
+
+#:SECTION 09 -- MISC {{{
+#############################################################################################
+exec_always --no-startup-id dunst &
+#######exec_always --no-startup-id rofi -show drun &
+exec --no-startup-id gsettings set org.gnome.desktop.interface show-battery-percentage true
+#: }}}
+

@@ -1,0 +1,6 @@
+configuration {
+  }
+@theme "~/.config/rofi/navy-and-ivory.rasi";
+@run-command "~/.config/rofi/scripts/dynamic-menu.sh"; // Call the script
+@run-command "~/.config/rofi/scripts/icon-menu.sh"; // Call the icon script
+
