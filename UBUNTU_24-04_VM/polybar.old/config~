@@ -1,0 +1,117 @@
+;==========================================================================================
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;==========================================================================================
+
+[colors]
+CLRBG = #021b21
+CLRFG = #e8dfd6
+CLR01 = #c2454e
+CLR02 = #7cbf9e
+CLR03 = #8a7a63
+CLR04 = #2e3340
+CLR05 = #ff5879
+CLR06 = #44b5b1
+CLR07 = #f2f1b9
+CLR08 = #065f73
+CLR09 = #ef5847
+CLR10 = #a2d9b1
+CLR11 = #beb090
+CLR12 = #61778d
+CLR13 = #ff99a1
+CLR14 = #9ed9d8
+CLR15 = #f6f6c9
+
+[bar/bar01]
+width = 100%
+height = 40
+background = ${colors.CLR04}
+foreground = ${colors.CLRFG}
+border-size = 2
+border-color = ${colors.CLR02}
+padding-left = 0
+padding-right = 0
+font-0 = JetBrains Mono:size=12;3
+font-1 = FontAwesome:size=12;3
+font-2 = Roboto Mono:size=12;3
+
+modules-left = i3
+modules-center = date
+;modules-right = memory cpu battery eth weather powermenu
+modules-right = memory cpu battery eth powermenu
+tray-position = right
+tray-padding = 3
+tray-background = ${colors.CLR03}
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+label-mode = %mode%
+label-focused = %index%
+label-urgent = ${self.label-focused}
+label-foreground = ${colors.CLRFG}
+label-underline = ${colors.CLR01}
+
+[module/memory]
+type = internal/memory
+interval = 3
+format = 🧠 %percentage%% | %used% / %total%
+label-foreground = ${colors.CLRFG}
+format-underline = ${colors.CLR08}
+
+[module/cpu]
+type = internal/cpu
+interval = 1
+format = 💻 %percentage%% | <ramp-coreload>
+label-foreground = ${colors.CLRFG}
+format-underline = ${colors.CLR09}
+
+[module/battery]
+type = internal/battery
+full-at = 99
+low-at = 15
+poll-interval = 5
+format-charging = 🔌 %percentage%%
+format-discharging = 🔋 %percentage%%
+label-low = 🔴 BATTERY LOW
+
+[module/eth]
+type = internal/network
+interface = enp0s3
+format-connected = 🌐 %local_ip%
+format-disconnected = %ifname% disconnected
+
+[module/weather]
+type = custom/script
+exec = ~/.config/polybar/scripts/weather.sh
+interval = 600
+format = ☀️ %output%
+
+[module/date]
+type = internal/date
+interval = 1
+format = 📅 %Y-%m-%d %H:%M
+label-foreground = ${colors.CLR11}
+
+[module/powermenu]
+type = custom/menu
+format-open = ⚙️
+label-open-foreground = ${colors.CLR14}
+label-separator = |
+label-separator-foreground = ${colors.CLR11}
+
+;==========================================================================================
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini
+

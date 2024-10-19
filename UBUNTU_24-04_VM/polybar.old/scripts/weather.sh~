@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Fetch weather data
+LOCATION="<YOUR_CITY>"
+WEATHER=$(weather -f $LOCATION -s)
+
+# Format the output
+echo "Weather: $WEATHER"
+

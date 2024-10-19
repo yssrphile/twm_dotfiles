@@ -1,0 +1,268 @@
+;==========================================================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+; 
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================================================
+
+; [COLOR DEFINITIONS]
+; setting bar colors -- theme: navy-and-ivory
+[colors]
+CLRBG = #021b21
+CLRFG = #e8dfd6
+CLR00 = #032c36
+CLR01 = #c2454e
+CLR02 = #7cbf9e
+CLR03 = #8a7a63
+CLR04 = #2e3340
+CLR05 = #ff5879
+CLR06 = #44b5b1
+CLR07 = #f2f1b9
+CLR08 = #065f73
+CLR09 = #ef5847
+CLR10 = #a2d9b1
+CLR11 = #beb090
+CLR12 = #61778d
+CLR13 = #ff99a1
+CLR14 = #9ed9d8
+CLR15 = #f6f6c9
+
+;==========================================================================================
+
+; [BAR DEFINITIONS]
+[bar/bar01]
+;--- SIZE AND SHAPE
+width = 100%
+height = 36
+radius = 0.0
+fixed-center = false
+dpi-x = 0
+dpi-y = 0
+
+;-- COLORS and CONFIGS
+background = ${colors.CLR00}
+foreground = ${colors.CLRFG}
+dim-value = 0.95
+line-size = 4
+line-color = ${colors.CLR03}
+border-size = 4
+border-color = ${colors.CLR01}
+padding-left = 0
+padding-right = 2
+module-margin-left = 1
+module-margin-right = 2
+scroll-up = i3-msg workspace next_on_output
+scroll-down = i3-msg workspace prev_on_output
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+;--- FONTS
+font-0 = JetBrains Mono:size=14
+font-1 = Roboto Mono:size=14
+font-2 = Hack:size=14
+
+;--- MODULES and TRAY
+modules-left = i3
+modules-center = 
+;modules-right = memory cpu battery eth date weather powermenu
+modules-right = memory cpu battery eth date powermenu
+tray-position = right
+tray-padding = 3
+tray-detached = false
+tray-background = ${colors.CLR04}
+tray-foreground = ${colors.CLRFG}
+
+; [MODULE DEFINITIONS]
+[module/i3]
+;--- BASIC FORMATTING
+type = internal/i3
+pin-workspaces = true
+show-urgent = false
+strip-wsnumbers = false
+index-sort = true
+enable-click = true
+enable-scroll = false
+wrapping-scroll = false
+reverse-scroll = false
+fuzzy-match = true
+
+;--- EXTRA FORMATTING
+format = <label-state> <label-mode>
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-foreground = ${colors.CLRFG}
+label-mode-background = ${colors.CLR02}
+label-focused = %index%
+label-focused-background = ${colors.CLR05}
+label-focused-underline = ${colors.CLR01}
+label-focused-padding = 2
+label-unfocused = ${self.label-focused}
+label-unfocused-padding = ${self.label-focused-padding}
+label-visible = ${self.label-focused}
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+label-urgent = ${self.label-focused}
+label-urgent-background = ${colors.CLR09}
+
+[module/memory]
+;--- BASIC FORMATTING
+type = internal/memory
+interval = 3
+warn-percentage = 95
+
+;--- EXTRA FORMATTING
+format = <label> <ramp-used>
+format-underline = ${colors.CLR08}
+label = RAM: %used% / %total%
+label-warn = RAM: %used% / %total%
+ramp-used-0 = ▁
+ramp-used-1 = ▂
+ramp-used-2 = ▃
+ramp-used-3 = ▄
+ramp-used-4 = ▅
+ramp-used-5 = ▆
+ramp-used-6 = ▇
+ramp-used-7 = █
+
+[module/cpu]
+;--- BASIC FORMATTING
+type = internal/cpu
+interval = 0.5
+warn-percentage = 95
+
+;--- EXTRA FORMATTING
+format = <label> <ramp-coreload>
+format-underline = ${colors.CLR09}
+label = %percentage%%
+label-warn = %percentage%%
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
+
+[module/battery]
+;--- BASIC FORMATTING
+type = internal/battery
+full-at = 99
+low-at = 15
+battery = BAT0
+adapter = AC
+poll-interval = 5
+
+;--- EXTRA FORMATTING
+time-format = %H:%M
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = ${colors.CLR13}
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-underline = ${self.format-charging-underline}
+format-full-underline = ${self.format-charging-underline}
+format-low = <label-low> <animation-low>
+label-charging = Charging: %percentage%%
+label-discharging = Discharging: %percentage%%
+label-full = Fully charged
+label-low = BATTERY LOW
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colors.CLR11}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colors.CLR11}
+animation-charging-framerate = 750
+animation-low-0 = !
+animation-low-1 = 
+animation-low-framerate = 200
+
+[module/eth]
+;--- BASIC FORMATTING
+type = internal/network
+interface = enp0s3
+interval = 2.0
+
+;--- EXTRA FORMATTING
+format-connected = <label-connected>
+format-connected-underline = ${colors.CLR10}
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${self.format-connected-underline}
+label-connected = %local_ip%
+label-disconnected = %ifname% disconnected
+
+[module/date]
+;--- BASIC FORMATTING
+type = internal/date
+interval = 1.0
+date = " %Y-%m-%d "
+time = %H:%M
+
+;--- EXTRA FORMATTING
+format = 🕓 <label>
+format-foreground = ${colors.CLR11}
+format-underline = ${colors.CLR12}
+label = %date% %time%
+label-font = 3
+
+[module/powermenu]
+;--- BASIC FORMATTING
+type = custom/menu
+expand-right = true
+menu-0-0 = reboot
+menu-0-0-exec = #menu-apps.open.1
+menu-0-1 = power off
+menu-0-1-exec = #menu-apps.open.2
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = systemctl reboot
+menu-2-0 = power off
+menu-2-0-exec = systemctl poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+;--- EXTRA FORMATTING
+format-spacing = 1
+label-open = 
+label-open-foreground = ${colors.CLR14}
+label-close =  cancel
+label-close-foreground = ${colors.CLR14}
+label-separator = |
+label-separator-foreground = ${colors.CLR11}
+
+[module/weather]
+type = custom/script
+exec = ~/.config/polybar/scripts/weather.sh
+interval = 600  ; Update every 10 minutes
+format = %output%
+
+;==========================================================================================
+
+; [MISCELLANEOUS DEFINITIONS]
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini
+
