@@ -120,6 +120,8 @@
   bat
   fd
   brave
+  oh-my-fish
+  git
   #####
   ];
 
@@ -135,6 +137,9 @@
     nerd-fonts.fira-code
     nerd-fonts.roboto-mono
   ];
+
+  # VMware tools (for allowing the guest OS to work seamlessly)
+  virtualisation.vmware.guest.enable = true;
   ##### ***
 
   # Some programs need SUID wrappers, can be configured further or are
