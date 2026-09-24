@@ -135,6 +135,100 @@
   #####
   ];
 
+  programs.vim = {
+    enable = true;
+
+    extraConfig = ''
+      " Get the defaults that most users want.
+      source $VIMRUNTIME/defaults.vim
+
+      set termguicolors
+
+      if has("vms")
+        set nobackup
+      else
+        set backup
+        if has('persistent_undo')
+          set undofile
+        endif
+      endif
+
+      if &t_Co > 2 || has("gui_running")
+        set hlsearch
+      endif
+
+      augroup vimrcEx
+        autocmd!
+        autocmd FileType text setlocal textwidth=78
+      augroup END
+
+      if has('syntax') && has('eval')
+        packadd! matchit
+      endif
+
+      " ===== BASIC =====
+      set number
+      set cursorline
+      syntax enable
+      set background=dark
+      set laststatus=2
+
+      " ===== BASE COLORS =====
+      hi Normal       guifg=#c0c5ce guibg=#2b303b
+      hi Cursor       guifg=#2b303b guibg=#eff1f5
+      hi Visual       guibg=#4f5b66 guifg=#eff1f5
+
+      " ===== SYNTAX =====
+      hi Comment      guifg=#65737e gui=italic
+      hi Keyword      guifg=#bf616a gui=bold
+      hi String       guifg=#a3be8c
+      hi Identifier   guifg=#96b5b4
+      hi Function     guifg=#8fa1b3
+      hi Type         guifg=#ebcb8b
+
+      " ===== UI =====
+      hi LineNr       guifg=#65737e guibg=NONE
+      hi CursorLine   guibg=#343d46
+      hi CursorLineNr guifg=#eff1f5 gui=bold
+
+      " ===== STATUSLINE (CUSTOM GROUPS) =====
+      " {to check for the statusline colors, type :highlight}
+      hi MyStatusLeft   guifg=#2b303b guibg=#8fa1b3 gui=bold
+      hi MyStatusAccent guifg=#c0c5ce guibg=#4f5b66
+      hi MyStatusRight  guifg=#2b303b guibg=#a3be8c gui=bold
+
+      set statusline=
+      set statusline+=%#MyStatusLeft#
+      set statusline+=\ %F\ 
+
+      set statusline+=%#MyStatusAccent#
+      set statusline+=\ %y\ %m\ %r
+
+      set statusline+=%=
+
+      set statusline+=%#MyStatusRight#
+      set statusline+=\ [%4l:%-4L]\ 
+      set statusline+=\ %7P\ 
+
+      " [ clear search highlighting after search ]
+      "   : just hit ENTER key again
+      nnoremap <CR> :noh<CR><CR>
+
+      " ### BACKGROUND COLOR FIX ###
+      " https://unix.stackexchange.com/questions/516380/terminalkitty-colors-altering-vim-color-scheme
+      let &t_ut=''
+
+      " ### TERMINAL MOUSE FIX ###
+      " https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
+      if $TERM == 'alacritty'
+        set ttymouse=sgr
+      endif
+
+      if $TERM == 'kitty'
+        set ttymouse=sgr
+      endif
+    '';
+  };
 
   ### ***
   ### MANUALLY ADDED BELOW #### /// >>>
