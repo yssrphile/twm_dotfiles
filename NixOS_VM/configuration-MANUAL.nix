@@ -4,9 +4,13 @@
 
 ##### NOTE TO SELF: HOW TO UPDATE THE SYSTEM
 ##### [1] sudo nix-channel --update
-##### [2] sudo nixos-rebuild switch
+##### [2] sudo nixos-rebuild dry-build
 # 
-##### [3] [only if needed] sudo nix-collect-garbage -d
+##### [3] [if want to check config] sudo nixos-rebuild test
+# 
+##### [4] sudo nixos-rebuild switch
+# 
+##### [5] [only if needed] sudo nix-collect-garbage -d
 
 { config, pkgs, ... }:
 
