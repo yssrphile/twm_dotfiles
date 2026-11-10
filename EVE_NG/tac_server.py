@@ -6,7 +6,7 @@ import threading
 # Configuration
 LISTEN_IP = "0.0.0.0"
 LISTEN_PORT = 49
-SHARED_SECRET = "eve_ng"  # The TACACS+ key configured on the switch
+SHARED_SECRET = "eve_ng"  # Must exactly match your 'tacacs-server key eve_ng' configuration
 
 USERS = {
     "admin": {"password": "eve_ng", "priv-lvl": 15},
@@ -42,7 +42,7 @@ def make_packet(version, type_, seq_no, session_id, body_data):
     return header + encrypted_body
 
 def handle_client(client_socket):
-    # Track the active session state mapped by TACACS+ Session ID
+    # Track the active session steps and user mappings dynamically 
     session_state = {}
     
     try:
@@ -57,45 +57,68 @@ def handle_client(client_socket):
             
             # --- AUTHENTICATION (Type 1) ---
             if type_ == 1: 
-                if seq_no == 1: # START packet
+                if seq_no == 1: # START packet from Cisco IOS
                     action, priv_lvl, authen_type, service, user_len, port_len, rem_len, data_len = struct.unpack("!BBBBBBBB", body[:8])
                     username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
                     if user_len > 0:
-                        session_state[session_id] = username
-                        print(f"[DEBUG] Session {session_id}: Received Username '{username}' in START packet")
+                        # Cisco explicitly sent the username on packet 1
+                        session_state[session_id] = {"username": username, "step": "expect_pass"}
+                        print(f"[DEBUG] Session {session_id}: Cisco sent Username '{username}' in START. Prompting for password.")
+                        server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " # STATUS_GETPASS = 2
                     else:
-                        print(f"[DEBUG] Session {session_id}: Inbound ASCII flow (No username in START)")
+                        # Cisco initiated a blind ASCII login. We MUST ask for Username first.
+                        session_state[session_id] = {"username": "", "step": "expect_user"}
+                        print(f"[DEBUG] Session {session_id}: Pure ASCII Flow. Prompting Cisco for Username.")
+                        server_body = struct.pack("!HHBB", 0, 0, 1, 0) + b"Username: " # STATUS_GETUSER = 1
                     
-                    # Reply asking for the password (STATUS_GETPASS = 2)
-                    server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " 
                     client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
                     
-                elif seq_no == 3: # CONTINUE packet containing password
+                elif seq_no == 3: # First CONTINUE packet from Cisco
                     pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
+                    payload = body[5:5+pass_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
-                    # Extract raw password and sanitize it of terminating nulls, returns, or spaces
-                    raw_password_str = body[5:5+pass_len].decode('utf-8', errors='ignore')
-                    password = raw_password_str.replace('\x00', '').replace('\r', '').replace('\n', '').strip()
+                    state = session_state.get(session_id, {"username": "", "step": "expect_user"})
                     
-                    # Extract trailing data which often holds the username in ASCII flow sequences
-                    extra_data = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
+                    if state["step"] == "expect_user":
+                        # This payload is actually the Username string
+                        username = payload
+                        session_state[session_id] = {"username": username, "step": "expect_pass"}
+                        print(f"[DEBUG] Session {session_id}: Received Username target: '{username}'. Now prompting for Password.")
+                        
+                        # Reply asking for the password
+                        server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " # STATUS_GETPASS = 2
+                        client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
+                        
+                    elif state["step"] == "expect_pass":
+                        # This payload is the Password string
+                        password = payload
+                        username = state["username"] if state["username"] else "admin"
+                        
+                        print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
+                        print(f"[DEBUG] Session {session_id}: Cleaned Password String: '{password}'")
+                        
+                        authenticated = False
+                        if password == "eve_ng":
+                            authenticated = True
+                            print(f"[DEBUG] Session {session_id}: Password matched successfully!")
+                        else:
+                            print(f"[DEBUG] Session {session_id}: Password mismatch error.")
+                        
+                        status = 1 if authenticated else 2 # 1=PASS, 2=FAIL
+                        server_body = struct.pack("!HHBB", 0, 0, status, 0)
+                        client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
+                
+                elif seq_no == 5: # Second CONTINUE packet (Password step when Username came in seq 3)
+                    pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
+                    password = body[5:5+pass_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
-                    # Pull username from state mapping or assume the extra data string
-                    username = session_state.get(session_id)
-                    if not username and data_len > 0:
-                        username = extra_data
-                        session_state[session_id] = username
-                    
-                    # If we STILL don't have a username context due to switch mechanics, default it to admin for validation
-                    if not username:
-                        username = "admin"
+                    state = session_state.get(session_id, {"username": "admin"})
+                    username = state.get("username", "admin")
                     
                     print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
-                    print(f"[DEBUG] Session {session_id}: Raw Bytes Length: {pass_len}")
                     print(f"[DEBUG] Session {session_id}: Cleaned Password String: '{password}'")
                     
-                    # Core matching logic against our sanitized credentials
                     authenticated = False
                     if password == "eve_ng":
                         authenticated = True
@@ -103,11 +126,7 @@ def handle_client(client_socket):
                     else:
                         print(f"[DEBUG] Session {session_id}: Password mismatch error.")
                     
-                    status = 1 if authenticated else 2 # 1=PASS, 2=FAIL
-                    
-                    if not authenticated and session_id in session_state:
-                        del session_state[session_id]
-                        
+                    status = 1 if authenticated else 2 
                     server_body = struct.pack("!HHBB", 0, 0, status, 0)
                     client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
 
@@ -117,7 +136,8 @@ def handle_client(client_socket):
                 username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                 
                 if not username:
-                    username = session_state.get(session_id, "admin")
+                    state = session_state.get(session_id, {"username": "admin"})
+                    username = state.get("username", "admin")
                 
                 offset = 8 + user_len + port_len + rem_len
                 arg_lens = struct.unpack(f"!{arg_cnt}B", body[offset:offset+arg_cnt])
@@ -131,7 +151,7 @@ def handle_client(client_socket):
                 print(f"[DEBUG] Session {session_id}: Authorization request for user '{username}' with args: {args}")
                 
                 allowed = True
-                user_priv = USERS.get(username, {}).get("priv-lvl", 15) # Default to 15 if missing context to bypass login locks
+                user_priv = USERS.get(username, {}).get("priv-lvl", 15)
                 
                 if username == "readonly":
                     for arg in args:
@@ -167,7 +187,7 @@ def main():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((LISTEN_IP, LISTEN_PORT))
     server.listen(5)
-    print(f"[*] Pure Python TACACS+ Server listening on {LISTEN_IP}:{LISTEN_PORT}")
+    print(f"[*] Cisco-Optimized TACACS+ Server listening on {LISTEN_IP}:{LISTEN_PORT}")
     
     try:
         while True:
@@ -180,5 +200,5 @@ def main():
     finally:
         server.close()
 
-if __name__ == "__main__":
+if name == "main":
     main()
