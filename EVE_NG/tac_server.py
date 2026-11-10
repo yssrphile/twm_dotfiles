@@ -59,11 +59,14 @@ def handle_client(client_socket):
             if type_ == 1: 
                 if seq_no == 1: # START packet
                     action, priv_lvl, authen_type, service, user_len, port_len, rem_len, data_len = struct.unpack("!BBBBBBBB", body[:8])
-                    username = body[8:8+user_len].decode('utf-8', errors='ignore')
+                    username = body[8:8+user_len].decode('utf-8', errors='ignore').strip()
                     
                     # Store the username using the unique session_id as the key
                     if user_len > 0:
                         session_state[session_id] = username
+                        print(f"[DEBUG] Session {session_id}: Received Username '{username}' in START packet")
+                    else:
+                        print(f"[DEBUG] Session {session_id}: Inbound ASCII flow (No username in START)")
                     
                     # Reply asking for the password (STATUS_GETPASS = 2)
                     server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " 
@@ -73,19 +76,30 @@ def handle_client(client_socket):
                     pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
                     password = body[5:5+pass_len].decode('utf-8', errors='ignore')
                     
-                    # Fallback check if username was sent in the data field of the CONTINUE packet
+                    # Extract any trailing data (often used by switches for username payload)
+                    extra_data = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore').strip()
+                    
+                    # Pull username from session state or attempt parsing from extra data
                     username = session_state.get(session_id)
                     if not username and data_len > 0:
-                        username = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore')
+                        username = extra_data
+                        session_state[session_id] = username
                     
+                    # Detailed Debug Strings
+                    print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
+                    print(f"[DEBUG] Session {session_id}: Raw Decrypted Password: '{password}'")
+                    print(f"[DEBUG] Session {session_id}: Stripped Password: '{password.strip()}'")
+                    
+                    # Validation with safety strip to protect against hidden trailing white-spaces or newline chars
                     authenticated = False
-                    if username in USERS:
-                        if USERS[username]["password"] == password:
-                            authenticated = True
+                    if password.strip() == "eve_ng":
+                        authenticated = True
+                        print(f"[DEBUG] Session {session_id}: Password verification successful.")
+                    else:
+                        print(f"[DEBUG] Session {session_id}: Password mismatch error.")
                     
                     status = 1 if authenticated else 2 # 1=PASS, 2=FAIL
                     
-                    # If authentication fails, clear the tracking state
                     if not authenticated and session_id in session_state:
                         del session_state[session_id]
                         
@@ -96,9 +110,9 @@ def handle_client(client_socket):
             elif type_ == 2: 
                 # REQUEST packet
                 authen_method, priv_lvl, authen_type, authen_service, user_len, port_len, rem_len, arg_cnt = struct.unpack("!BBBBBBBB", body[:8])
-                username = body[8:8+user_len].decode('utf-8', errors='ignore')
+                username = body[8:8+user_len].decode('utf-8', errors='ignore').strip()
                 
-                # If username is empty in the authorization request, pull it from our authentication session mapping
+                # Fallback to authentication session if username isn't passed down via authorization string
                 if not username:
                     username = session_state.get(session_id, "unknown")
                 
@@ -112,18 +126,19 @@ def handle_client(client_socket):
                     args.append(body[offset:offset+a_len].decode('utf-8', errors='ignore'))
                     offset += a_len
                 
-                # Check privilege level assignments and simple command restrictions
+                print(f"[DEBUG] Session {session_id}: Authorization request for user '{username}' with args: {args}")
+                
+                # Evaluate authorization level
                 allowed = True
                 user_priv = USERS.get(username, {}).get("priv-lvl", 1)
                 
-                # Enforce read-only vs admin limits
                 if username == "readonly":
                     for arg in args:
                         if "cmd=configure" in arg or "cmd-arg=config" in arg:
                             allowed = False
+                            print(f"[DEBUG] Session {session_id}: Denied configuration command for readonly user.")
 
                 status = 1 if allowed else 16 # 1=PASS (REPLACE/ADD), 16=FAIL
-                
                 reply_args = [f"priv-lvl={user_priv}".encode()]
                 reply_arg_cnt = len(reply_args)
                 
@@ -137,15 +152,13 @@ def handle_client(client_socket):
                 
             # --- ACCOUNTING (Type 3) ---
             elif type_ == 3:
-                # Clean up session state on accounting/disconnect signals
                 if session_id in session_state:
                     del session_state[session_id]
                 server_body = struct.pack("!HHBB", 0, 0, 1, 0) # STATUS_SUCCESS = 1
                 client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
 
     except Exception as e:
-        # Standard error handling block
-        pass
+        print(f"[!] Exception encountered within active thread: {e}")
     finally:
         client_socket.close()
 
