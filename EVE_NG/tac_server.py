@@ -48,7 +48,6 @@ def make_packet(version, type_, seq_no, session_id, body_data):
     return header + encrypted_body
 
 def handle_client(client_socket):
-    # Track the active session steps and user mappings dynamically 
     session_state = {}
     
     try:
@@ -68,15 +67,19 @@ def handle_client(client_socket):
                     username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
                     if user_len > 0:
-                        # Cisco explicitly sent the username on packet 1
                         session_state[session_id] = {"username": username, "step": "expect_pass"}
-                        print(f"[DEBUG] Session {session_id}: Cisco sent Username '{username}' in START. Prompting for password.")
-                        server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " # STATUS_GETPASS = 2
+                        print(f"[DEBUG] Session {session_id}: Cisco sent Username '{username}' in START.")
+                        
+                        # Build standard GETPASS body: msg_len, data_len, status=2, flags=0
+                        msg = b"Password: "
+                        server_body = struct.pack("!HHBB", len(msg), 0, 2, 0) + msg
                     else:
-                        # Cisco initiated a blind ASCII login. We MUST ask for Username first.
                         session_state[session_id] = {"username": "", "step": "expect_user"}
                         print(f"[DEBUG] Session {session_id}: Pure ASCII Flow. Prompting Cisco for Username.")
-                        server_body = struct.pack("!HHBB", 0, 0, 1, 0) + b"Username: " # STATUS_GETUSER = 1
+                        
+                        # Build explicit GETUSER body: msg_len, data_len, status=1, flags=0
+                        msg = b"Username: "
+                        server_body = struct.pack("!HHBB", len(msg), 0, 1, 0) + msg
                     
                     client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
                     
@@ -87,17 +90,16 @@ def handle_client(client_socket):
                     state = session_state.get(session_id, {"username": "", "step": "expect_user"})
                     
                     if state["step"] == "expect_user":
-                        # This payload is actually the Username string
                         username = payload
                         session_state[session_id] = {"username": username, "step": "expect_pass"}
-                        print(f"[DEBUG] Session {session_id}: Received Username target: '{username}'. Now prompting for Password.")
+                        print(f"[DEBUG] Session {session_id}: Received Username: '{username}'. Now prompting for Password.")
                         
-                        # Reply asking for the password
-                        server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " # STATUS_GETPASS = 2
+                        # Build exact GETPASS body for next sequence step
+                        msg = b"Password: "
+                        server_body = struct.pack("!HHBB", len(msg), 0, 2, 0) + msg
                         client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
                         
                     elif state["step"] == "expect_pass":
-                        # This payload is the Password string
                         password = payload
                         username = state["username"] if state["username"] else "admin"
                         
@@ -115,7 +117,7 @@ def handle_client(client_socket):
                         server_body = struct.pack("!HHBB", 0, 0, status, 0)
                         client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
                 
-                elif seq_no == 5: # Second CONTINUE packet (Password step when Username came in seq 3)
+                elif seq_no == 5: # Second CONTINUE packet (Password payload if Username came in seq 3)
                     pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
                     password = body[5:5+pass_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
