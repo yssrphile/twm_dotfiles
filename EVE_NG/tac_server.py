@@ -36,6 +36,12 @@ def decrypt_encrypt_body(header, body):
 def make_packet(version, type_, seq_no, session_id, body_data):
     flags = 0x00 # Encrypted
     length = len(body_data)
+    
+    # CISCO IOS COMPLIANCE FIX: If this is an Authentication packet (Type 1),
+    # force the minor version flag to 1 (0xc1) so Cisco accepts the response step.
+    if type_ == 1:
+        version = 0xc1
+        
     header = struct.pack("!BBBBII", version, type_, seq_no, flags, session_id, length)
     pad = pseudo_pad(struct.pack("!I", session_id), SHARED_SECRET, version, seq_no, length)
     encrypted_body = bytes(a ^ b for a, b in zip(body_data, pad))
