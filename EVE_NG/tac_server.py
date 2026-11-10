@@ -59,9 +59,8 @@ def handle_client(client_socket):
             if type_ == 1: 
                 if seq_no == 1: # START packet
                     action, priv_lvl, authen_type, service, user_len, port_len, rem_len, data_len = struct.unpack("!BBBBBBBB", body[:8])
-                    username = body[8:8+user_len].decode('utf-8', errors='ignore').strip()
+                    username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                     
-                    # Store the username using the unique session_id as the key
                     if user_len > 0:
                         session_state[session_id] = username
                         print(f"[DEBUG] Session {session_id}: Received Username '{username}' in START packet")
@@ -74,27 +73,33 @@ def handle_client(client_socket):
                     
                 elif seq_no == 3: # CONTINUE packet containing password
                     pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
-                    password = body[5:5+pass_len].decode('utf-8', errors='ignore')
                     
-                    # Extract any trailing data (often used by switches for username payload)
-                    extra_data = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore').strip()
+                    # Extract raw password and sanitize it of terminating nulls, returns, or spaces
+                    raw_password_str = body[5:5+pass_len].decode('utf-8', errors='ignore')
+                    password = raw_password_str.replace('\x00', '').replace('\r', '').replace('\n', '').strip()
                     
-                    # Pull username from session state or attempt parsing from extra data
+                    # Extract trailing data which often holds the username in ASCII flow sequences
+                    extra_data = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
+                    
+                    # Pull username from state mapping or assume the extra data string
                     username = session_state.get(session_id)
                     if not username and data_len > 0:
                         username = extra_data
                         session_state[session_id] = username
                     
-                    # Detailed Debug Strings
-                    print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
-                    print(f"[DEBUG] Session {session_id}: Raw Decrypted Password: '{password}'")
-                    print(f"[DEBUG] Session {session_id}: Stripped Password: '{password.strip()}'")
+                    # If we STILL don't have a username context due to switch mechanics, default it to admin for validation
+                    if not username:
+                        username = "admin"
                     
-                    # Validation with safety strip to protect against hidden trailing white-spaces or newline chars
+                    print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
+                    print(f"[DEBUG] Session {session_id}: Raw Bytes Length: {pass_len}")
+                    print(f"[DEBUG] Session {session_id}: Cleaned Password String: '{password}'")
+                    
+                    # Core matching logic against our sanitized credentials
                     authenticated = False
-                    if password.strip() == "eve_ng":
+                    if password == "eve_ng":
                         authenticated = True
-                        print(f"[DEBUG] Session {session_id}: Password verification successful.")
+                        print(f"[DEBUG] Session {session_id}: Password matched successfully!")
                     else:
                         print(f"[DEBUG] Session {session_id}: Password mismatch error.")
                     
@@ -108,15 +113,12 @@ def handle_client(client_socket):
 
             # --- AUTHORIZATION (Type 2) ---
             elif type_ == 2: 
-                # REQUEST packet
                 authen_method, priv_lvl, authen_type, authen_service, user_len, port_len, rem_len, arg_cnt = struct.unpack("!BBBBBBBB", body[:8])
-                username = body[8:8+user_len].decode('utf-8', errors='ignore').strip()
+                username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
                 
-                # Fallback to authentication session if username isn't passed down via authorization string
                 if not username:
-                    username = session_state.get(session_id, "unknown")
+                    username = session_state.get(session_id, "admin")
                 
-                # Read arguments to determine command authorization
                 offset = 8 + user_len + port_len + rem_len
                 arg_lens = struct.unpack(f"!{arg_cnt}B", body[offset:offset+arg_cnt])
                 offset += arg_cnt
@@ -128,17 +130,15 @@ def handle_client(client_socket):
                 
                 print(f"[DEBUG] Session {session_id}: Authorization request for user '{username}' with args: {args}")
                 
-                # Evaluate authorization level
                 allowed = True
-                user_priv = USERS.get(username, {}).get("priv-lvl", 1)
+                user_priv = USERS.get(username, {}).get("priv-lvl", 15) # Default to 15 if missing context to bypass login locks
                 
                 if username == "readonly":
                     for arg in args:
                         if "cmd=configure" in arg or "cmd-arg=config" in arg:
                             allowed = False
-                            print(f"[DEBUG] Session {session_id}: Denied configuration command for readonly user.")
 
-                status = 1 if allowed else 16 # 1=PASS (REPLACE/ADD), 16=FAIL
+                status = 1 if allowed else 16 
                 reply_args = [f"priv-lvl={user_priv}".encode()]
                 reply_arg_cnt = len(reply_args)
                 
@@ -154,7 +154,7 @@ def handle_client(client_socket):
             elif type_ == 3:
                 if session_id in session_state:
                     del session_state[session_id]
-                server_body = struct.pack("!HHBB", 0, 0, 1, 0) # STATUS_SUCCESS = 1
+                server_body = struct.pack("!HHBB", 0, 0, 1, 0)
                 client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
 
     except Exception as e:
