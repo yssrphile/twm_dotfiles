@@ -1,212 +1,100 @@
+
+    
+  
+#!/usr/bin/env python3
+"""
+Minimal TACACS+ server for a Cisco/EVE-NG lab.
+
+Supports:
+  - TACACS+ ASCII login authentication (GETUSER / GETPASS)
+  - Basic shell authorization and privilege-level attributes
+  - Accounting acknowledgements
+
+This is a lab implementation, not a production-hardened TACACS+ server.
+For production, use a maintained TACACS+ daemon with proper logging,
+configuration management, TLS/network protections where applicable, etc.
+"""
+
+import hashlib
+import hmac
+import logging
 import socket
 import struct
-import hashlib
 import threading
 
-# Configuration
 LISTEN_IP = "0.0.0.0"
 LISTEN_PORT = 49
-SHARED_SECRET = "eve_ng"  # Must exactly match your 'tacacs-server key eve_ng' configuration
+SHARED_SECRET = "eve_ng"
 
+# Usernames and passwords are case-sensitive.
 USERS = {
-    "admin": {"password": "eve_ng", "priv-lvl": 15},
-    "readonly": {"password": "eve_ng", "priv-lvl": 1}
+    "admin": {"password": "eve_ng", "priv_lvl": 15, "role": "admin"},
+    "readonly": {"password": "eve_ng", "priv_lvl": 1, "role": "readonly"},
 }
 
-def pseudo_pad(session_id, key, version, seq_no, length):
-    """Generates the MD5 cryptographic pad used to XOR encrypt/decrypt TACACS+ bodies."""
-    pad = b""
-    last_hash = b""
-    while len(pad) < length:
-        md5 = hashlib.md5()
-        md5.update(session_id + key.encode() + bytes([version, seq_no]))
-        if last_hash:
-            md5.update(last_hash)
-        last_hash = md5.digest()
-        pad += last_hash
-    return pad[:length]
+MAX_BODY_LENGTH = 1_048_576
 
-def decrypt_encrypt_body(header, body):
-    version, _, seq_no, flags, session_id, length = struct.unpack("!BBBBII", header)
-    if flags & 0x01: # TAC_PLUS_UNENCRYPTED_FLAG
-        return body
-    pad = pseudo_pad(struct.pack("!I", session_id), SHARED_SECRET, version, seq_no, length)
+# TACACS+ packet types
+AUTHEN = 1
+AUTHOR = 2
+ACCT = 3
+
+# Authentication reply status values
+AUTHEN_STATUS_PASS = 1
+AUTHEN_STATUS_FAIL = 2
+AUTHEN_STATUS_GETDATA = 3
+AUTHEN_STATUS_GETUSER = 4
+AUTHEN_STATUS_GETPASS = 5
+AUTHEN_STATUS_ERROR = 7
+
+# Authentication methods/types/services
+AUTHEN_TYPE_ASCII = 1
+AUTHEN_SERVICE_LOGIN = 1
+
+# Authorization reply status values
+AUTHOR_STATUS_PASS_ADD = 1
+AUTHOR_STATUS_FAIL = 16
+
+# Accounting reply status
+ACCT_STATUS_SUCCESS = 1
+
+TAC_PLUS_UNENCRYPTED_FLAG = 0x01
+
+
+def recv_exact(sock, count):
+    """Read exactly count bytes from a TCP stream, or raise if it closes."""
+    chunks = []
+    remaining = count
+    while remaining:
+        chunk = sock.recv(remaining)
+        if not chunk:
+            raise ConnectionError("Peer closed the connection")
+        chunks.append(chunk)
+        remaining -= len(chunk)
+    return b"".join(chunks)
+
+
+def crypt_body(session_id, secret, version, seq_no, body):
+    """Apply the TACACS+ MD5 XOR pad (the same operation encrypts/decrypts)."""
+    secret_bytes = secret.encode("utf-8")
+    pad = bytearray()
+    previous = b""
+
+    while len(pad) < len(body):
+        material = struct.pack("!I", session_id) + secret_bytes
+        material += bytes((version, seq_no))
+        if previous:
+            material += previous
+        previous = hashlib.md5(material).digest()
+        pad.extend(previous)
+
     return bytes(a ^ b for a, b in zip(body, pad))
 
-def make_packet(version, type_, seq_no, session_id, body_data):
-    flags = 0x00 # Encrypted
-    length = len(body_data)
-    
-    # CISCO IOS COMPLIANCE FIX: If this is an Authentication packet (Type 1),
-    # force the minor version flag to 1 (0xc1) so Cisco accepts the response step.
-    if type_ == 1:
-        version = 0xc1
-        
-    header = struct.pack("!BBBBII", version, type_, seq_no, flags, session_id, length)
-    pad = pseudo_pad(struct.pack("!I", session_id), SHARED_SECRET, version, seq_no, length)
-    encrypted_body = bytes(a ^ b for a, b in zip(body_data, pad))
-    return header + encrypted_body
 
-def handle_client(client_socket):
-    session_state = {}
-    
-    try:
-        while True:
-            header = client_socket.recv(12)
-            if not header or len(header) < 12:
-                break
-            
-            version, type_, seq_no, flags, session_id, length = struct.unpack("!BBBBII", header)
-            raw_body = client_socket.recv(length)
-            body = decrypt_encrypt_body(header, raw_body)
-            
-            # --- AUTHENTICATION (Type 1) ---
-            if type_ == 1: 
-                if seq_no == 1: # START packet from Cisco IOS
-                    action, priv_lvl, authen_type, service, user_len, port_len, rem_len, data_len = struct.unpack("!BBBBBBBB", body[:8])
-                    username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
-                    
-                    if user_len > 0:
-                        session_state[session_id] = {"username": username, "step": "expect_pass"}
-                        print(f"[DEBUG] Session {session_id}: Cisco sent Username '{username}' in START.")
-                        
-                        # Build standard GETPASS body: msg_len, data_len, status=2, flags=0
-                        msg = b"Password: "
-                        server_body = struct.pack("!HHBB", len(msg), 0, 2, 0) + msg
-                    else:
-                        session_state[session_id] = {"username": "", "step": "expect_user"}
-                        print(f"[DEBUG] Session {session_id}: Pure ASCII Flow. Prompting Cisco for Username.")
-                        
-                        # Build explicit GETUSER body: msg_len, data_len, status=1, flags=0
-                        msg = b"Username: "
-                        server_body = struct.pack("!HHBB", len(msg), 0, 1, 0) + msg
-                    
-                    client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
-                    
-                elif seq_no == 3: # First CONTINUE packet from Cisco
-                    pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
-                    payload = body[5:5+pass_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
-                    
-                    state = session_state.get(session_id, {"username": "", "step": "expect_user"})
-                    
-                    if state["step"] == "expect_user":
-                        username = payload
-                        session_state[session_id] = {"username": username, "step": "expect_pass"}
-                        print(f"[DEBUG] Session {session_id}: Received Username: '{username}'. Now prompting for Password.")
-                        
-                        # Build exact GETPASS body for next sequence step
-                        msg = b"Password: "
-                        server_body = struct.pack("!HHBB", len(msg), 0, 2, 0) + msg
-                        client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
-                        
-                    elif state["step"] == "expect_pass":
-                        password = payload
-                        username = state["username"] if state["username"] else "admin"
-                        
-                        print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
-                        print(f"[DEBUG] Session {session_id}: Cleaned Password String: '{password}'")
-                        
-                        authenticated = False
-                        if password == "eve_ng":
-                            authenticated = True
-                            print(f"[DEBUG] Session {session_id}: Password matched successfully!")
-                        else:
-                            print(f"[DEBUG] Session {session_id}: Password mismatch error.")
-                        
-                        status = 1 if authenticated else 2 # 1=PASS, 2=FAIL
-                        server_body = struct.pack("!HHBB", 0, 0, status, 0)
-                        client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
-                
-                elif seq_no == 5: # Second CONTINUE packet (Password payload if Username came in seq 3)
-                    pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
-                    password = body[5:5+pass_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
-                    
-                    state = session_state.get(session_id, {"username": "admin"})
-                    username = state.get("username", "admin")
-                    
-                    print(f"[DEBUG] Session {session_id}: Active Username Context: '{username}'")
-                    print(f"[DEBUG] Session {session_id}: Cleaned Password String: '{password}'")
-                    
-                    authenticated = False
-                    if password == "eve_ng":
-                        authenticated = True
-                        print(f"[DEBUG] Session {session_id}: Password matched successfully!")
-                    else:
-                        print(f"[DEBUG] Session {session_id}: Password mismatch error.")
-                    
-                    status = 1 if authenticated else 2 
-                    server_body = struct.pack("!HHBB", 0, 0, status, 0)
-                    client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
+def decode_body(header, wire_body):
+    version, packet_type, seq_no, flags, session_id, body_length = struct.unpack(
+        "!BBBBII", header
+    )
+    if flags & TAC_PLUS_UNENCRYPTED_FLAG:
+        return wire_body
 
-            # --- AUTHORIZATION (Type 2) ---
-            elif type_ == 2: 
-                authen_method, priv_lvl, authen_type, authen_service, user_len, port_len, rem_len, arg_cnt = struct.unpack("!BBBBBBBB", body[:8])
-                username = body[8:8+user_len].decode('utf-8', errors='ignore').replace('\x00', '').strip()
-                
-                if not username:
-                    state = session_state.get(session_id, {"username": "admin"})
-                    username = state.get("username", "admin")
-                
-                offset = 8 + user_len + port_len + rem_len
-                arg_lens = struct.unpack(f"!{arg_cnt}B", body[offset:offset+arg_cnt])
-                offset += arg_cnt
-                
-                args = []
-                for a_len in arg_lens:
-                    args.append(body[offset:offset+a_len].decode('utf-8', errors='ignore'))
-                    offset += a_len
-                
-                print(f"[DEBUG] Session {session_id}: Authorization request for user '{username}' with args: {args}")
-                
-                allowed = True
-                user_priv = USERS.get(username, {}).get("priv-lvl", 15)
-                
-                if username == "readonly":
-                    for arg in args:
-                        if "cmd=configure" in arg or "cmd-arg=config" in arg:
-                            allowed = False
-
-                status = 1 if allowed else 16 
-                reply_args = [f"priv-lvl={user_priv}".encode()]
-                reply_arg_cnt = len(reply_args)
-                
-                server_body = struct.pack("!BBHH", status, reply_arg_cnt, 0, 0)
-                for r_arg in reply_args:
-                    server_body += struct.pack("!B", len(r_arg))
-                for r_arg in reply_args:
-                    server_body += r_arg
-                    
-                client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
-                
-            # --- ACCOUNTING (Type 3) ---
-            elif type_ == 3:
-                if session_id in session_state:
-                    del session_state[session_id]
-                server_body = struct.pack("!HHBB", 0, 0, 1, 0)
-                client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
-
-    except Exception as e:
-        print(f"[!] Exception encountered within active thread: {e}")
-    finally:
-        client_socket.close()
-
-def main():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind((LISTEN_IP, LISTEN_PORT))
-    server.listen(5)
-    print(f"[*] Cisco-Optimized TACACS+ Server listening on {LISTEN_IP}:{LISTEN_PORT}")
-    
-    try:
-        while True:
-            client, addr = server.accept()
-            t = threading.Thread(target=handle_client, args=(client,))
-            t.daemon = True
-            t.start()
-    except KeyboardInterrupt:
-        print("\n[*] Shutting down server.")
-    finally:
-        server.close()
-
-if __name__ == "__main__":
-    main()
