@@ -117,10 +117,21 @@ def make_packet(version, packet_type, seq_no, flags, session_id, body):
 
 
 def authen_reply(version, seq_no, flags, session_id, status,
-                 server_msg=b"", data=b""):
-    body = struct.pack("!HHBB", len(server_msg), len(data), status, 0)
+                 server_msg=b"", data=b"", reply_flags=0):
+
+    body = struct.pack(
+        "!BBHH",
+        status,
+        reply_flags,
+        len(server_msg),
+        len(data)
+    )
+
     body += server_msg + data
-    return make_packet(version, AUTHEN, seq_no, flags, session_id, body)
+
+    return make_packet(
+        version, AUTHEN, seq_no, flags, session_id, body
+    )
 
 
 def parse_authen_start(body):
@@ -251,7 +262,7 @@ def handle_authentication(body, version, seq_no, flags, session_id, sessions):
                          session_id, username)
             return authen_reply(
                 version, seq_no + 1, flags, session_id,
-                AUTHEN_STATUS_GETPASS, b"Password: "
+                AUTHEN_STATUS_GETPASS, b"Password: ", reply_flags=0x01
             )
 
         logging.info("Session %08x: requesting username", session_id)
@@ -286,7 +297,7 @@ def handle_authentication(body, version, seq_no, flags, session_id, sessions):
                      session_id, value)
         return authen_reply(
             version, seq_no + 1, flags, session_id,
-            AUTHEN_STATUS_GETPASS, b"Password: "
+            AUTHEN_STATUS_GETPASS, b"Password: ", reply_flags=0x01
         )
 
     username = state["username"]
