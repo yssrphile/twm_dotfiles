@@ -42,6 +42,9 @@ def make_packet(version, type_, seq_no, session_id, body_data):
     return header + encrypted_body
 
 def handle_client(client_socket):
+    # Track the active session state mapped by TACACS+ Session ID
+    session_state = {}
+    
     try:
         while True:
             header = client_socket.recv(12)
@@ -55,27 +58,37 @@ def handle_client(client_socket):
             # --- AUTHENTICATION (Type 1) ---
             if type_ == 1: 
                 if seq_no == 1: # START packet
-                    # Reply asking for the password (TAC_PLUS_AUTHEN_STATUS_GETPASS)
-                    # We assume ASCII login and that the switch sent the username in START or we default to requesting PASS
                     action, priv_lvl, authen_type, service, user_len, port_len, rem_len, data_len = struct.unpack("!BBBBBBBB", body[:8])
                     username = body[8:8+user_len].decode('utf-8', errors='ignore')
                     
-                    # Save username context in socket wrapper if needed, or ask for password
-                    server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " # STATUS_GETPASS = 2
+                    # Store the username using the unique session_id as the key
+                    if user_len > 0:
+                        session_state[session_id] = username
+                    
+                    # Reply asking for the password (STATUS_GETPASS = 2)
+                    server_body = struct.pack("!HHBB", 0, 0, 2, 0) + b"Password: " 
                     client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
                     
                 elif seq_no == 3: # CONTINUE packet containing password
                     pass_len, flags, data_len = struct.unpack("!HHB", body[:5])
                     password = body[5:5+pass_len].decode('utf-8', errors='ignore')
-                    # Extract username from previous context or generic extraction if switch packets vary
-                    # For simplicity in basic scripts, we match the known credentials
+                    
+                    # Fallback check if username was sent in the data field of the CONTINUE packet
+                    username = session_state.get(session_id)
+                    if not username and data_len > 0:
+                        username = body[5+pass_len:5+pass_len+data_len].decode('utf-8', errors='ignore')
                     
                     authenticated = False
-                    for u, creds in USERS.items():
-                        if creds["password"] == password: # Simple fallback verification
+                    if username in USERS:
+                        if USERS[username]["password"] == password:
                             authenticated = True
                     
                     status = 1 if authenticated else 2 # 1=PASS, 2=FAIL
+                    
+                    # If authentication fails, clear the tracking state
+                    if not authenticated and session_id in session_state:
+                        del session_state[session_id]
+                        
                     server_body = struct.pack("!HHBB", 0, 0, status, 0)
                     client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
 
@@ -84,6 +97,10 @@ def handle_client(client_socket):
                 # REQUEST packet
                 authen_method, priv_lvl, authen_type, authen_service, user_len, port_len, rem_len, arg_cnt = struct.unpack("!BBBBBBBB", body[:8])
                 username = body[8:8+user_len].decode('utf-8', errors='ignore')
+                
+                # If username is empty in the authorization request, pull it from our authentication session mapping
+                if not username:
+                    username = session_state.get(session_id, "unknown")
                 
                 # Read arguments to determine command authorization
                 offset = 8 + user_len + port_len + rem_len
@@ -101,15 +118,12 @@ def handle_client(client_socket):
                 
                 # Enforce read-only vs admin limits
                 if username == "readonly":
-                    # Block configuration commands or high privilege arguments
                     for arg in args:
                         if "cmd=configure" in arg or "cmd-arg=config" in arg:
                             allowed = False
 
                 status = 1 if allowed else 16 # 1=PASS (REPLACE/ADD), 16=FAIL
                 
-                # Build Response: status, arg_cnt, msg_len, data_len
-                # Include privilege level argument response
                 reply_args = [f"priv-lvl={user_priv}".encode()]
                 reply_arg_cnt = len(reply_args)
                 
@@ -123,11 +137,14 @@ def handle_client(client_socket):
                 
             # --- ACCOUNTING (Type 3) ---
             elif type_ == 3:
-                # Always succeed accounting requests automatically
+                # Clean up session state on accounting/disconnect signals
+                if session_id in session_state:
+                    del session_state[session_id]
                 server_body = struct.pack("!HHBB", 0, 0, 1, 0) # STATUS_SUCCESS = 1
                 client_socket.sendall(make_packet(version, type_, seq_no + 1, session_id, server_body))
 
-    except Exception:
+    except Exception as e:
+        # Standard error handling block
         pass
     finally:
         client_socket.close()
