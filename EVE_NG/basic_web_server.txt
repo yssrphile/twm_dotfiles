@@ -6,8 +6,8 @@
     <title>Connection Test</title>
     <style>
         body {
-            background-color: #d9d8d8;
-            color: #009ddc;
+            background-color: #beb090;
+            color: #ef5847;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,10 +18,14 @@
         h1 {
             font-size: 75px;
             font-weight: bold;
+	    text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Connection Success!!!</h1>
+    <h1>
+        Connection Success!!!<br><br>
+        INET-WWW-SVR
+    </h1>
 </body>
 </html>
